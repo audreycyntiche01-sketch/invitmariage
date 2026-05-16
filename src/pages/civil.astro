@@ -1,0 +1,740 @@
+---
+// Page Mariage Civil — Authentification + Contenu
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mariage Civil & Bénédiction — Audrey & Cyntiche</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #1E0A0A;
+    }
+
+    /* ── Fond blanc/rouge élégant ── */
+    .page-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 130% 80% at -5%   -5%,   rgba(178,34,34,0.09) 0%, transparent 52%),
+        radial-gradient(ellipse 110% 75% at 105%  105%,  rgba(178,34,34,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 80%  55% at 102%  -2%,   rgba(212,175,55,0.06) 0%, transparent 48%),
+        radial-gradient(ellipse 70%  50% at -3%   102%,  rgba(212,175,55,0.05) 0%, transparent 45%),
+        #FDFCFB;
+    }
+
+    /* ── Fleurs (identiques à l'accueil, réutilisées) ── */
+    .flowers-svg {
+      position: fixed; inset: 0; z-index: 1;
+      width: 100%; height: 100%;
+      pointer-events: none; overflow: visible;
+    }
+
+    /* ══════════════════════════════════════
+       AUTH GATE — formulaire centré
+    ══════════════════════════════════════ */
+    #auth-gate {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .auth-card {
+      background: rgba(255, 252, 250, 0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 20px;
+      padding: 52px 48px 44px;
+      width: 100%;
+      max-width: 460px;
+      text-align: center;
+      box-shadow: 0 12px 48px rgba(100, 30, 30, 0.1);
+    }
+
+    /* Mini enveloppe décorative */
+    .auth-icon {
+      width: 70px; height: 50px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+
+    .auth-icon svg { width: 100%; height: 100%; }
+
+    /* Titre */
+    .auth-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      color: #1A0808;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .auth-date {
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #B22222;
+      margin-bottom: 28px;
+    }
+
+    .auth-instructions {
+      font-size: 1rem;
+      font-style: italic;
+      font-weight: 300;
+      color: #7A4848;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    /* Champ code */
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    #code-input {
+      width: 100%;
+      padding: 14px 20px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-align: center;
+      text-transform: uppercase;
+      color: #1A0808;
+      background: #FFFFFF;
+      border: 2px solid rgba(178, 34, 34, 0.3);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #code-input:focus {
+      border-color: #B22222;
+      box-shadow: 0 0 0 3px rgba(178, 34, 34, 0.12);
+    }
+
+    #code-input.input-error {
+      border-color: #B22222;
+      background: #FFF5F5;
+      animation: shake 0.35s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25%       { transform: translateX(-6px); }
+      75%       { transform: translateX(6px); }
+    }
+
+    /* Bouton */
+    .btn-submit {
+      width: 100%;
+      padding: 14px 24px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #FFFFFF;
+      background: #B22222;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      margin-bottom: 14px;
+    }
+
+    .btn-submit:hover  { background: #8B1515; }
+    .btn-submit:active { transform: scale(0.98); }
+
+    .btn-submit:disabled {
+      background: #CCA0A0;
+      cursor: not-allowed;
+    }
+
+    /* Loader dans le bouton */
+    .btn-submit .loader {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #FFF;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Message d'erreur */
+    .error-msg {
+      font-size: 0.88rem;
+      color: #B22222;
+      margin-top: 4px;
+      min-height: 20px;
+    }
+
+    /* Lien retour */
+    .back-link {
+      display: inline-block;
+      margin-top: 18px;
+      font-size: 0.82rem;
+      color: #AA7878;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: #B22222; }
+
+    /* ══════════════════════════════════════
+       CIVIL CONTENT — affiché après auth
+    ══════════════════════════════════════ */
+    #civil-content {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      padding: 60px 32px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+    }
+
+    #civil-content.hidden { display: none; }
+
+    .content-header {
+      text-align: center;
+    }
+
+    .content-welcome {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #1A0808;
+      line-height: 1.1;
+    }
+
+    .content-subtitle {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-style: italic;
+      font-weight: 300;
+      color: #7A4848;
+      margin-top: 8px;
+    }
+
+    .content-card {
+      background: rgba(255, 252, 250, 0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 16px;
+      padding: 36px 40px;
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(100, 30, 30, 0.08);
+    }
+
+    .content-card h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.8rem;
+      color: #B22222;
+      margin-bottom: 16px;
+    }
+
+    .content-card p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: #5A3030;
+      line-height: 1.7;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .home-link {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      color: #8B1515;
+      text-decoration: none;
+      border: 1px solid rgba(178, 34, 34, 0.38);
+      border-radius: 20px;
+      padding: 8px 20px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .home-link:hover { color: #B22222; border-color: #B22222; }
+
+    .btn-logout {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      color: #AA7878;
+      background: none;
+      border: 1px solid rgba(170, 120, 120, 0.4);
+      border-radius: 20px;
+      padding: 8px 20px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-logout:hover { color: #B22222; border-color: #B22222; }
+
+    /* ── Séparateur ── */
+    .divider {
+      display: flex; align-items: center; gap: 14px;
+      width: 100%; max-width: 400px;
+    }
+
+    .dv-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent,
+        rgba(178,34,34,0.3) 30%, rgba(212,175,55,0.5) 50%,
+        rgba(178,34,34,0.3) 70%, transparent);
+    }
+
+    .dv-icon { font-size: 1rem; color: rgba(178,34,34,0.42); }
+
+    /* ── Photo couple ── */
+    .couple-photo-wrap { max-width: 680px; width: 100%; text-align: center; }
+    .couple-photo {
+      max-width: 340px; width: 82%; height: auto;
+      filter: drop-shadow(0 8px 24px rgba(178,34,34,0.18));
+    }
+
+    /* ── Texte d'amour ── */
+    .love-quote {
+      font-size: 1.01rem; font-weight: 300;
+      color: #4A2020; line-height: 1.9; font-style: italic;
+    }
+    .love-sign {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.45rem; color: #B22222;
+      font-style: normal; display: inline-block; margin-top: 10px;
+    }
+
+    /* ── Adresse ── */
+    .address-block { margin-bottom: 18px; }
+    .address-block p { font-size: 1rem; color: #4A2020; line-height: 1.65; }
+    .address-ref { font-style: italic; color: #8A5858 !important; font-size: 0.9rem !important; margin-top: 6px; }
+
+    /* ── Carte Maps ── */
+    .map-wrap { border-radius: 12px; overflow: hidden; border: 1px solid rgba(178,34,34,0.2); margin-top: 16px; }
+    .map-wrap iframe { display: block; width: 100%; height: 260px; border: none; }
+
+    /* ── Cadeau ── */
+    .gift-card {
+      background: linear-gradient(135deg, #B22222 0%, #8B1515 60%, #6B0F0F 100%) !important;
+      border: 1.5px solid rgba(212, 175, 55, 0.6) !important;
+      box-shadow: 0 8px 40px rgba(178, 34, 34, 0.35), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding: 22px 36px !important;
+    }
+
+    .gift-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% -10%,
+        rgba(212,175,55,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .gift-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .gift-icon { font-size: 1.9rem; line-height: 1; }
+
+    .gift-card h2 {
+      color: #D4AF37 !important;
+      font-size: 1.9rem !important;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      margin-bottom: 0 !important;
+    }
+
+    .gift-line {
+      width: 60px; height: 1.5px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,0.7), transparent);
+      margin: 10px auto;
+    }
+
+    .gift-note {
+      font-size: 1.18rem !important;
+      color: rgba(255, 248, 230, 0.95) !important;
+      line-height: 1.6;
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      .auth-card { padding: 40px 24px 36px; }
+      #civil-content { padding: 40px 20px 64px; }
+      .content-card { padding: 28px 24px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Fond aquarelle -->
+  <div class="page-bg"></div>
+
+  <!-- Fleurs décoratives (réutilisées de l'accueil) -->
+  <svg class="flowers-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
+       xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <g id="fl"><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(0)"   opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(45)"  opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(90)"  opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(135)" opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(180)" opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(225)" opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(270)" opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(315)" opacity="0.88"/><ellipse cx="0" cy="-18" rx="8"  ry="16" fill="#D0607A" transform="rotate(22.5)"  opacity="0.9"/><ellipse cx="0" cy="-18" rx="8"  ry="16" fill="#D0607A" transform="rotate(67.5)"  opacity="0.9"/><ellipse cx="0" cy="-18" rx="8"  ry="16" fill="#D0607A" transform="rotate(112.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8"  ry="16" fill="#D0607A" transform="rotate(157.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8"  ry="16" fill="#D0607A" transform="rotate(202.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8"  ry="16" fill="#D0607A" transform="rotate(247.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8"  ry="16" fill="#D0607A" transform="rotate(292.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8"  ry="16" fill="#D0607A" transform="rotate(337.5)" opacity="0.9"/><circle r="10" fill="#C0506C"/><circle r="4.5" fill="#D4AF37" opacity="0.9"/></g>
+      <g id="fs"><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(0)"   opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(60)"  opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(120)" opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(180)" opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(240)" opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(300)" opacity="0.85"/><circle r="7" fill="#C85878"/><circle r="3" fill="#D4AF37" opacity="0.85"/></g>
+    </defs>
+    <g transform="translate(68,72)"    opacity="0.55"><use href="#fl"/><g transform="translate(78,-32) rotate(20)"><use href="#fs"/></g><g transform="translate(-36,68) rotate(-15)"><use href="#fs"/></g></g>
+    <g transform="translate(1372,72)"  opacity="0.53"><use href="#fl" transform="rotate(18)"/><g transform="translate(-80,-28) rotate(-22)"><use href="#fs"/></g><g transform="translate(32,70) rotate(12)"><use href="#fs"/></g></g>
+    <g transform="translate(68,828)"   opacity="0.52"><use href="#fl" transform="rotate(-15)"/><g transform="translate(80,28) rotate(18)"><use href="#fs"/></g></g>
+    <g transform="translate(1372,828)" opacity="0.54"><use href="#fl" transform="rotate(22)"/><g transform="translate(-84,26) rotate(-20)"><use href="#fs"/></g></g>
+    <!-- Veines dorées -->
+    <path d="M 145 0 C 195 85, 275 135, 330 248 S 390 435, 445 542"  stroke="rgba(212,175,55,0.48)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M 905 0 C 945 70, 982 142, 1005 225 S 1045 385, 1095 490" stroke="rgba(212,175,55,0.44)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  </svg>
+
+  <!-- ════════════════════════════════════
+       FORMULAIRE D'AUTHENTIFICATION
+  ════════════════════════════════════ -->
+  <div id="auth-gate">
+    <div class="auth-card">
+
+      <!-- Icône enveloppe -->
+      <div class="auth-icon">
+        <svg viewBox="0 0 70 50" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="68" height="48" rx="5" fill="white" stroke="#B22222" stroke-width="1.5"/>
+          <polygon points="1,1 70,1 35,28" fill="#B22222" opacity="0.9"/>
+          <polygon points="1,50 35,28 70,50" fill="rgba(178,34,34,0.06)"/>
+          <line x1="1" y1="50" x2="35" y2="28" stroke="#B22222" stroke-width="1" opacity="0.2"/>
+          <line x1="70" y1="50" x2="35" y2="28" stroke="#B22222" stroke-width="1" opacity="0.2"/>
+          <circle cx="35" cy="28" r="9" fill="#B22222" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+          <text x="35" y="32" text-anchor="middle" fill="white" font-family="'Great Vibes', cursive" font-size="9">AC</text>
+        </svg>
+      </div>
+
+      <h1 class="auth-title">Mariage Civil &amp; Bénédiction</h1>
+      <p class="auth-date">10 juillet 2026</p>
+      <p class="auth-instructions">Votre présence est notre plus beau cadeau.<br>Entrez votre code pour rejoindre notre célébration.</p>
+
+      <form id="code-form" novalidate>
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="code-input"
+            placeholder="AC-0000"
+            maxlength="7"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+            inputmode="text"
+          />
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-submit">
+          Accéder
+        </button>
+
+        <p class="error-msg" id="error-msg"></p>
+      </form>
+
+      <a href="/" class="back-link">← Retour à l'accueil</a>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       CONTENU CIVIL (après authentification)
+  ════════════════════════════════════ -->
+  <div id="civil-content" class="hidden">
+
+    <div class="content-header">
+      <p class="content-welcome" id="welcome-msg">Bienvenue !</p>
+      <p class="content-subtitle">Mariage Civil &amp; Bénédiction · 10 juillet 2026</p>
+    </div>
+
+    <div class="divider" aria-hidden="true">
+      <span class="dv-line"></span><span class="dv-icon">✿</span><span class="dv-line"></span>
+    </div>
+
+    <!-- Photo des mariés -->
+    <div class="couple-photo-wrap">
+      <img src="/images/couple.png" alt="Audrey & Cyntiche" class="couple-photo" loading="lazy" />
+    </div>
+
+    <!-- Texte des mariés -->
+    <div class="content-card">
+      <h2>Il était une fois…</h2>
+      <p class="love-quote">
+        Au sillage de l'amour qui renaît chaque jour et nous prouve, au quotidien,
+        qu'il vaut la peine d'être vécu. Par la tendresse et la douceur qu'il impose
+        à nos âmes, par l'émerveillement d'un conte de fées et l'épanouissement
+        d'avoir trouvé la bonne personne.
+        <br><br>
+        Le sentiment d'être inébranlables en nous tenant la main, les yeux pleins
+        de larmes, nous pousse à célébrer cet amour qui rend notre combat doux et possible.
+        <br><br>
+        <span class="love-sign">Avec vous, nos chers invités.</span>
+      </p>
+    </div>
+
+    <div class="divider" aria-hidden="true">
+      <span class="dv-line"></span><span class="dv-icon">✿</span><span class="dv-line"></span>
+    </div>
+
+    <!-- Programme -->
+    <div class="content-card">
+      <h2>Programme de la cérémonie</h2>
+      <p>Le programme détaillé sera partagé prochainement.<br>
+      Rendez-vous le <strong>10 juillet 2026</strong> pour vivre ensemble ce moment inoubliable.</p>
+    </div>
+
+    <!-- Localisation -->
+    <div class="content-card">
+      <h2>Lieu &amp; Localisation</h2>
+      <div class="address-block">
+        <p><strong>Avenue Ambassadeur Théo n°2 Mbayo</strong></p>
+        <p>Ngaliema / Okapi — Kinshasa</p>
+        <p class="address-ref">📌 Réf : Portail grise au fond de l'avenue</p>
+      </div>
+      <div class="map-wrap">
+        <iframe
+          src="https://maps.google.com/maps?q=Ngaliema%2C+Kinshasa%2C+Congo&hl=fr&z=14&output=embed"
+          loading="lazy"
+          allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Localisation de la cérémonie">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- Cadeaux -->
+    <div class="content-card gift-card">
+      <div class="gift-header">
+        <span class="gift-icon">💝</span>
+        <h2>Cadeaux</h2>
+      </div>
+      <div class="gift-line"></div>
+      <p class="gift-note">Les mariés privilégient les cadeaux en argent.</p>
+    </div>
+
+    <div class="divider" aria-hidden="true">
+      <span class="dv-line"></span><span class="dv-icon">✿</span><span class="dv-line"></span>
+    </div>
+
+    <div class="nav-links">
+      <a href="/" class="home-link">← Accueil</a>
+      <button class="btn-logout" id="btn-logout">Se déconnecter</button>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+
+    /* ─────────────────────────────────────
+       CONFIG — remplace par ton URL Apps Script
+       après déploiement sur Google Apps Script
+    ───────────────────────────────────── */
+    var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCGsowtXA9FPrTzpBHYegGEtL0_M-AguUYp_Z6d7GWP-7D7ahojqhLQrz-vvtyBKvGSQ/exec';
+
+    /* ── Mode développement local (contourne le blocage CORS de localhost) ──
+       En production (Vercel), IS_DEV = false → appel réel à Apps Script     */
+    /* Mode dev : localhost ET toutes les IP locales (WiFi téléphone) */
+    var _h = window.location.hostname;
+    var IS_DEV = (_h === 'localhost' || _h === '127.0.0.1' ||
+                  /^192\.168\./.test(_h) || /^10\./.test(_h) ||
+                  /^172\.(1[6-9]|2\d|3[01])\./.test(_h));
+
+    /* Codes acceptés en mode dev (n'importe quel AC-XXXX valide passe) */
+    var DEV_TEST_CODES = ['AC-4827','AC-3951','AC-7284','AC-6103','AC-5739'];
+
+    /* ─────────────────────────────────────
+       GESTION SESSION (localStorage, 30 jours)
+    ───────────────────────────────────── */
+    var SESSION_KEY = 'civil_session_v1';
+
+    function getSession() {
+      try {
+        var raw = localStorage.getItem(SESSION_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch(e) { return null; }
+    }
+
+    function saveSession(data) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        code:  data.code,
+        nom:   data.nom,
+        token: data.token
+      }));
+    }
+
+    function clearSession() {
+      localStorage.removeItem(SESSION_KEY);
+    }
+
+    /* Génère un token unique pour cet appareil/navigateur */
+    function getDeviceToken() {
+      var t = localStorage.getItem('_dtoken');
+      if (!t) {
+        t = Math.random().toString(36).slice(2) + Date.now().toString(36);
+        localStorage.setItem('_dtoken', t);
+      }
+      return t;
+    }
+
+    /* ─────────────────────────────────────
+       AFFICHAGE
+    ───────────────────────────────────── */
+    var gate    = document.getElementById('auth-gate');
+    var content = document.getElementById('civil-content');
+
+    function showContent(session) {
+      gate.style.display = 'none';
+      content.classList.remove('hidden');
+      var msg = document.getElementById('welcome-msg');
+      if (session && session.nom) {
+        msg.textContent = 'Bienvenue, ' + session.nom + ' !';
+      } else {
+        msg.textContent = 'Bienvenue !';
+      }
+    }
+
+    function showError(msg) {
+      var el = document.getElementById('error-msg');
+      var input = document.getElementById('code-input');
+      el.textContent = msg;
+      input.classList.add('input-error');
+      setTimeout(function () { input.classList.remove('input-error'); }, 600);
+    }
+
+    /* ─────────────────────────────────────
+       VÉRIFICATION AU CHARGEMENT
+    ───────────────────────────────────── */
+    var session = getSession();
+    if (session) {
+      showContent(session);
+    }
+
+    /* ─────────────────────────────────────
+       FORMATAGE DU CODE (AC-XXXX auto)
+    ───────────────────────────────────── */
+    var input = document.getElementById('code-input');
+
+    input.addEventListener('input', function () {
+      var raw = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+      /* Préfixe AC- obligatoire */
+      if (raw.length >= 2 && raw.slice(0, 2) !== 'AC') {
+        raw = 'AC' + raw.replace(/[A-Z]/g, '');
+      }
+
+      /* Insérer le tiret après AC */
+      var formatted = raw;
+      if (raw.length > 2) {
+        formatted = raw.slice(0, 2) + '-' + raw.slice(2, 6);
+      }
+      this.value = formatted;
+    });
+
+    /* ─────────────────────────────────────
+       SOUMISSION DU FORMULAIRE
+    ───────────────────────────────────── */
+    var form   = document.getElementById('code-form');
+    var btn    = document.getElementById('btn-submit');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      var code = input.value.trim().toUpperCase();
+      var errEl = document.getElementById('error-msg');
+      errEl.textContent = '';
+
+      /* Validation format basique */
+      if (!/^AC-\d{4}$/.test(code)) {
+        showError('Format invalide. Exemple : AC-2847');
+        return;
+      }
+
+      /* Désactiver le bouton pendant la vérification */
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loader"></span>Vérification…';
+
+      try {
+        var deviceToken = getDeviceToken();
+
+        /* ── MODE DEV : pas d'appel réseau, validation locale ── */
+        if (IS_DEV) {
+          if (DEV_TEST_CODES.includes(code)) {
+            saveSession({ code: code, nom: 'Invité(e) Test', token: deviceToken });
+            showContent({ nom: 'Invité(e) Test' });
+          } else {
+            showError('[DEV] Code non reconnu. Codes de test : AC-4827, AC-3951…');
+          }
+          btn.disabled = false;
+          btn.innerHTML = 'Accéder';
+          return;
+        }
+
+        /* ── MODE PRODUCTION : appel Apps Script ── */
+        var resp = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'validateCode', code: code, deviceToken: deviceToken }),
+          headers: { 'Content-Type': 'text/plain' } /* évite le preflight CORS */
+        });
+
+        var result = await resp.json();
+
+        if (result.success) {
+          saveSession({ code: code, nom: result.nom, token: deviceToken });
+          showContent({ nom: result.nom });
+        } else {
+          showError(result.message || 'Code invalide. Vérifiez votre invitation.');
+        }
+
+      } catch (err) {
+        showError('Erreur réseau. Réessayez dans quelques instants.');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Accéder';
+      }
+    });
+
+    /* ─────────────────────────────────────
+       DÉCONNEXION
+    ───────────────────────────────────── */
+    document.getElementById('btn-logout').addEventListener('click', function () {
+      clearSession();
+      content.classList.add('hidden');
+      gate.style.display = 'flex';
+      input.value = '';
+    });
+
+  })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+# Build
+dist/
+.astro/
+
+# Node
+node_modules/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Scripts utilitaires (pas nécessaires en prod)
+compress-galerie.mjs
+
+# Dossier source images (non compressées)
+images/

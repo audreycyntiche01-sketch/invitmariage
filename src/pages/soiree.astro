@@ -1,0 +1,1441 @@
+---
+// Page Soirée — Inscription unique + Programme
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soirée — Audrey & Cyntiche</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #1E0A0A;
+    }
+
+    .page-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: url('/images/fondsoiree1.jpg') center / cover no-repeat;
+    }
+
+    .flowers-svg {
+      position: fixed; inset: 0; z-index: 1;
+      width: 100%; height: 100%;
+      pointer-events: none; overflow: visible;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ══════════════════════════════════════
+       REGISTER GATE
+    ══════════════════════════════════════ */
+    #register-gate {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 24px;
+    }
+
+    .auth-card {
+      background: rgba(255, 252, 250, 0.91);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.38);
+      border-radius: 20px;
+      padding: 44px 48px 38px;
+      width: 100%;
+      max-width: 560px;
+      text-align: center;
+      box-shadow: 0 12px 48px rgba(100, 30, 30, 0.1);
+    }
+
+    .auth-icon {
+      width: 70px; height: 50px;
+      margin: 0 auto 20px;
+    }
+    .auth-icon svg { width: 100%; height: 100%; }
+
+    .auth-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      color: #1A0808;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .auth-date {
+      font-size: 0.82rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #C9A84C;
+      margin-bottom: 14px;
+    }
+
+    /* ── Compte à rebours soirée ── */
+    .countdown-soiree {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .cd-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cd-num {
+      font-family: Arial, 'Helvetica Neue', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #350202;
+      line-height: 1;
+      background: rgba(178, 34, 34, 0.07);
+      border: 1px solid rgba(17, 13, 1, 0.35);
+      border-radius: 8px;
+      padding: 7px 11px;
+      min-width: 50px;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    .cd-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: #613e05;
+      margin-top: 5px;
+    }
+
+    .cd-sep {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: rgba(201, 168, 76, 0.5);
+      align-self: flex-start;
+      margin-top: 6px;
+    }
+
+    .auth-intro {
+      font-size: 0.9rem;
+      font-style: italic;
+      font-weight: 300;
+      color: #7A4848;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    /* ── Onglets ── */
+    .panel-toggle {
+      display: flex;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.28);
+      margin-bottom: 24px;
+    }
+
+    .panel-tab {
+      flex: 1;
+      padding: 10px 8px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #AA9080;
+      background: none;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      cursor: pointer;
+      margin-bottom: -1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .panel-tab.active { color: #8A6220; border-bottom-color: #C9A84C; }
+    .panel-tab:hover  { color: #8A6220; }
+
+    /* ── Champs formulaire ── */
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      font-size: 0.76rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #8A6220;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .opt { font-size: 0.68rem; color: #AA9080; font-style: italic;
+           letter-spacing: 0; text-transform: none; font-weight: 400; margin-left: 4px; }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 11px 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: #1A0808;
+      background: #FFFFFF;
+      border: 1.5px solid rgba(201, 168, 76, 0.4);
+      border-radius: 9px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #C9A84C;
+      box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.14);
+    }
+
+    .field input.err { border-color: #B22222; background: #FFF5F5; }
+    .field select.err { border-color: #B22222; background: #FFF5F5; }
+
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute; right: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: #C9A84C; pointer-events: none; font-size: 0.85rem;
+    }
+
+    /* ── Bouton ── */
+    .btn-submit {
+      width: 100%;
+      padding: 13px 24px;
+      margin-top: 6px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, #C0392B 0%, #C9A84C 70%, #B8900A 100%);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover  { opacity: 0.88; }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-submit .loader {
+      display: inline-block;
+      width: 13px; height: 13px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #FFF;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 7px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-msg {
+      font-size: 0.86rem;
+      color: #B22222;
+      margin-top: 8px;
+      min-height: 18px;
+      text-align: center;
+    }
+
+    .reconnect-intro {
+      font-size: 0.92rem;
+      color: #7A4848;
+      font-style: italic;
+      margin-bottom: 20px;
+      line-height: 1.55;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 18px;
+      font-size: 0.82rem;
+      color: #AA7878;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #C9A84C; }
+
+    /* ══════════════════════════════════════
+       PROGRAM VIEW
+    ══════════════════════════════════════ */
+    #program-view {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      padding: 60px 32px 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .content-header { text-align: center; }
+
+    .content-welcome {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #1A0808;
+      line-height: 1.1;
+    }
+
+    .content-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.2rem);
+      font-style: italic;
+      font-weight: 300;
+      color: #7A4848;
+      margin-top: 6px;
+    }
+
+    /* Badge table */
+    .table-badge {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 22px;
+      padding: 22px 48px;
+      background: rgba(255, 250, 243, 0.10);
+      border: 2px solid rgba(201, 168, 76, 0.65);
+      border-radius: 14px;
+      gap: 5px;
+      box-shadow: 0 6px 28px rgba(100, 30, 30, 0.13);
+      max-width: 480px;
+    }
+
+    .table-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #8A6220;
+      font-weight: 700;
+    }
+
+    .table-name {
+      font-family: Arial, 'Helvetica Neue', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #B22222;
+      line-height: 1.2;
+    }
+
+    .table-anecdote {
+      font-size: 1.2rem;
+      font-style: italic;
+      font-weight: 400;
+      color: #5A3020;
+      margin-top: 2px;
+      text-align: center;
+      line-height: 1;
+    }
+
+    .boisson-display {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #8A6220;
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .content-card {
+      background: rgba(255, 252, 250, 0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 16px;
+      padding: 36px 40px;
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(100, 30, 30, 0.08);
+    }
+
+    .content-card h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.9rem;
+      color: #C9A84C;
+      margin-bottom: 14px;
+    }
+
+    .content-card p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: #5A3030;
+      line-height: 1.75;
+    }
+
+    /* Séparateur */
+    .divider {
+      display: flex; align-items: center; gap: 14px;
+      width: 100%; max-width: 400px;
+    }
+    .dv-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent,
+        rgba(201,168,76,0.42) 30%, rgba(212,175,55,0.6) 50%,
+        rgba(201,168,76,0.42) 70%, transparent);
+    }
+    .dv-icon { font-size: 1rem; color: rgba(201,168,76,0.55); }
+
+    /* Nav liens bas */
+    .nav-links {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .home-link {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      color: #8A6220;
+      text-decoration: none;
+      border: 1px solid rgba(201, 168, 76, 0.45);
+      border-radius: 20px;
+      padding: 9px 22px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .home-link:hover { color: #C9A84C; border-color: #C9A84C; }
+
+    .btn-logout {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      color: #AA7878;
+      background: none;
+      border: 1px solid rgba(170, 120, 120, 0.4);
+      border-radius: 20px;
+      padding: 9px 22px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-logout:hover { color: #B22222; border-color: #B22222; }
+
+    /* ══════════════════════════════════════
+       MODAL CONFIRMATION TABLE
+    ══════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 20;
+      background: rgba(18, 4, 4, 0.62);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      animation: mFadeIn 0.25s ease;
+    }
+    @keyframes mFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-card {
+      background: #FDFCFB;
+      border: 1.5px solid rgba(212, 175, 55, 0.5);
+      border-radius: 22px;
+      padding: 48px 40px 40px;
+      max-width: 440px; width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(100, 30, 30, 0.22);
+      animation: mSlideIn 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes mSlideIn {
+      from { opacity: 0; transform: scale(0.88) translateY(28px); }
+      to   { opacity: 1; transform: scale(1)    translateY(0); }
+    }
+
+    .modal-flower { font-size: 2rem; display: block; margin-bottom: 10px; }
+
+    .modal-welcome-text {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      color: #1A0808; line-height: 1.1; margin-bottom: 4px;
+    }
+
+    .modal-subtitle {
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #C9A84C;
+      margin-bottom: 28px;
+    }
+
+    .modal-table-badge {
+      background: rgba(255, 250, 243, 0.98);
+      border: 2px solid rgba(201, 168, 76, 0.65);
+      border-radius: 14px;
+      padding: 20px 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 16px rgba(100, 30, 30, 0.1);
+    }
+
+    .modal-table-label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #6A4A10;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .modal-table-name {
+      display: block;
+      font-family: Arial, 'Helvetica Neue', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #B22222;
+      line-height: 1.2;
+    }
+
+    .modal-anecdote {
+      display: block;
+      font-size: 0.9rem;
+      font-style: italic;
+      font-weight: 400;
+      color: #5A3020;
+      line-height: 1.55;
+      margin-top: 8px;
+    }
+
+    .modal-btn {
+      width: 100%;
+      padding: 13px 24px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, #C0392B 0%, #C9A84C 70%, #B8900A 100%);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .modal-btn:hover  { opacity: 0.88; }
+    .modal-btn:active { transform: scale(0.98); }
+
+    /* ── Galerie carousel ── */
+    .gallery-section {
+      width: 100%;
+      max-width: 760px;
+      text-align: center;
+    }
+
+    .gallery-intro {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      color: #1A0808;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .gallery-sub {
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #8A6220;
+      margin-bottom: 20px;
+    }
+
+    .carousel-wrap {
+      position: relative;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+      cursor: grab;
+    }
+    .carousel-track:active { cursor: grabbing; }
+    .carousel-track::-webkit-scrollbar { display: none; }
+
+    .carousel-track img {
+      flex: 0 0 auto;
+      width: 72vw;
+      max-width: 380px;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1.5px solid rgba(201, 168, 76, 0.4);
+      box-shadow: 0 6px 24px rgba(100, 30, 30, 0.15);
+      scroll-snap-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .carousel-track img:hover {
+      transform: scale(1.025);
+      box-shadow: 0 10px 32px rgba(100, 30, 30, 0.25);
+    }
+
+    /* Boutons prev / next */
+    .carousel-btn {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 252, 250, 0.88);
+      border: 1.5px solid rgba(201, 168, 76, 0.5);
+      color: #8A6220;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      transition: background 0.2s, color 0.2s;
+      z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .carousel-btn:hover { background: #C9A84C; color: #FFF; }
+    .carousel-btn.prev { left: -18px; }
+    .carousel-btn.next { right: -18px; }
+
+    /* Indicateurs dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+    .carousel-dots span {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(201, 168, 76, 0.35);
+      transition: background 0.25s, transform 0.25s;
+      cursor: pointer;
+    }
+    .carousel-dots span.active {
+      background: #C9A84C;
+      transform: scale(1.35);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(10, 2, 2, 0.93);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      animation: mFadeIn 0.2s ease;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 88vh;
+      border-radius: 10px;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.5);
+      object-fit: contain;
+    }
+
+    .lightbox-close {
+      position: absolute; top: 18px; right: 22px;
+      font-size: 2rem; color: rgba(255,255,255,0.8);
+      background: none; border: none; cursor: pointer;
+      line-height: 1; transition: color 0.2s;
+    }
+    .lightbox-close:hover { color: #C9A84C; }
+
+    .lightbox-prev,
+    .lightbox-next {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      font-size: 2.4rem; color: rgba(255,255,255,0.75);
+      background: none; border: none; cursor: pointer;
+      padding: 10px 16px; transition: color 0.2s;
+    }
+    .lightbox-prev { left: 6px; }
+    .lightbox-next { right: 6px; }
+    .lightbox-prev:hover,
+    .lightbox-next:hover { color: #C9A84C; }
+
+    /* ── Mobile ── */
+    @media (max-width: 767px) {
+      .page-bg {
+        background-image: url('/images/fondsoiree2.jpg');
+        background-position: center top;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .auth-card   { padding: 36px 22px 32px; }
+      .field-row   { grid-template-columns: 1fr; }
+      #program-view { padding: 40px 20px 64px; }
+      .content-card { padding: 28px 22px; }
+      .table-badge  { padding: 14px 28px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-bg"></div>
+
+  <!-- Fleurs (mêmes que civil) -->
+  <svg class="flowers-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
+       xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <g id="fl"><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(0)"   opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(45)"  opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(90)"  opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(135)" opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(180)" opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(225)" opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(270)" opacity="0.88"/><ellipse cx="0" cy="-30" rx="12" ry="26" fill="#E8889E" transform="rotate(315)" opacity="0.88"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#D0607A" transform="rotate(22.5)"  opacity="0.9"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#D0607A" transform="rotate(67.5)"  opacity="0.9"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#D0607A" transform="rotate(112.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#D0607A" transform="rotate(157.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#D0607A" transform="rotate(202.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#D0607A" transform="rotate(247.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#D0607A" transform="rotate(292.5)" opacity="0.9"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#D0607A" transform="rotate(337.5)" opacity="0.9"/><circle r="10" fill="#C0506C"/><circle r="4.5" fill="#D4AF37" opacity="0.9"/></g>
+      <g id="fs"><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(0)"   opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(60)"  opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(120)" opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(180)" opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(240)" opacity="0.85"/><ellipse cx="0" cy="-18" rx="8" ry="16" fill="#F0A8BC" transform="rotate(300)" opacity="0.85"/><circle r="7" fill="#C85878"/><circle r="3" fill="#D4AF37" opacity="0.85"/></g>
+    </defs>
+    <g transform="translate(68,72)"    opacity="0.55"><use href="#fl"/><g transform="translate(78,-32) rotate(20)"><use href="#fs"/></g><g transform="translate(-36,68) rotate(-15)"><use href="#fs"/></g></g>
+    <g transform="translate(1372,72)"  opacity="0.53"><use href="#fl" transform="rotate(18)"/><g transform="translate(-80,-28) rotate(-22)"><use href="#fs"/></g><g transform="translate(32,70) rotate(12)"><use href="#fs"/></g></g>
+    <g transform="translate(68,828)"   opacity="0.52"><use href="#fl" transform="rotate(-15)"/><g transform="translate(80,28) rotate(18)"><use href="#fs"/></g></g>
+    <g transform="translate(1372,828)" opacity="0.54"><use href="#fl" transform="rotate(22)"/><g transform="translate(-84,26) rotate(-20)"><use href="#fs"/></g></g>
+    <path d="M 145 0 C 195 85, 275 135, 330 248 S 390 435, 445 542"  stroke="rgba(212,175,55,0.48)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M 905 0 C 945 70, 982 142, 1005 225 S 1045 385, 1095 490" stroke="rgba(212,175,55,0.44)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  </svg>
+
+  <!-- ════════════════════════════════════
+       FORMULAIRE D'INSCRIPTION
+  ════════════════════════════════════ -->
+  <div id="register-gate">
+    <div class="auth-card">
+
+      <!-- Enveloppe dorée -->
+      <div class="auth-icon">
+        <svg viewBox="0 0 70 50" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gf" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"   stop-color="#C0392B"/>
+              <stop offset="100%" stop-color="#C9A84C"/>
+            </linearGradient>
+          </defs>
+          <rect x="1" y="1" width="68" height="48" rx="5" fill="white" stroke="#C9A84C" stroke-width="1.5"/>
+          <polygon points="1,1 70,1 35,28" fill="url(#gf)" opacity="0.9"/>
+          <polygon points="1,50 35,28 70,50" fill="rgba(201,168,76,0.07)"/>
+          <line x1="1"  y1="50" x2="35" y2="28" stroke="#C9A84C" stroke-width="1" opacity="0.2"/>
+          <line x1="70" y1="50" x2="35" y2="28" stroke="#C9A84C" stroke-width="1" opacity="0.2"/>
+          <circle cx="35" cy="28" r="9" fill="#C9A84C" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+          <text x="35" y="32" text-anchor="middle" fill="white"
+                font-family="'Great Vibes', cursive" font-size="9">AC</text>
+        </svg>
+      </div>
+
+      <h1 class="auth-title">Soirée</h1>
+      <p class="auth-date">17 juillet 2026</p>
+
+      <!-- Compte à rebours (auth gate) -->
+      <div class="countdown-soiree">
+        <div class="cd-unit"><span class="cd-num cd-j">--</span><span class="cd-label">Jours</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-unit"><span class="cd-num cd-h">--</span><span class="cd-label">Heures</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-unit"><span class="cd-num cd-m">--</span><span class="cd-label">Min</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-unit"><span class="cd-num cd-s">--</span><span class="cd-label">Sec</span></div>
+      </div>
+
+      <p class="auth-intro">Votre présence illuminera notre conte de fées.<br>
+      Confirmez votre venue — la fête n'est complète qu'avec vous.</p>
+
+      <!-- Onglets -->
+      <div class="panel-toggle">
+        <button class="panel-tab active" id="tab-register"  type="button">Première inscription</button>
+        <button class="panel-tab"        id="tab-reconnect" type="button">Déjà inscrit(e)</button>
+      </div>
+
+      <!-- ── Panel A : Inscription ── -->
+      <div id="panel-register">
+        <form id="reg-form" novalidate>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="reg-prenom">Prénom</label>
+              <input type="text" id="reg-prenom" placeholder="Votre prénom"
+                     autocomplete="given-name" />
+            </div>
+            <div class="field">
+              <label for="reg-nom">Nom</label>
+              <input type="text" id="reg-nom" placeholder="Votre nom"
+                     autocomplete="family-name" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-sexe">Civilité</label>
+            <div class="select-wrap">
+              <select id="reg-sexe">
+                <option value="">Choisir…</option>
+                <option value="M">Monsieur</option>
+                <option value="F">Madame / Mademoiselle</option>
+                <option value="A">Autre</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-relation">Vous êtes…</label>
+            <div class="select-wrap">
+              <select id="reg-relation">
+                <option value="">Choisir…</option>
+                <option value="ami_cyntiche">Ami(e) / Connaissance de Cyntiche</option>
+                <option value="ami_audrey">Ami(e) / Connaissance d'Audrey</option>
+                <option value="famille_cyntiche">Famille de Cyntiche</option>
+                <option value="famille_audrey">Famille d'Audrey</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="reg-tel">Téléphone <span class="opt">optionnel</span></label>
+            <input type="tel" id="reg-tel" placeholder="+243 6 00 00 00 00"
+                   autocomplete="tel" />
+          </div>
+
+          <div class="field">
+            <label for="reg-allergie">Allergie alimentaire
+              <span class="opt">laisser vide si aucune</span>
+            </label>
+            <input type="text" id="reg-allergie" placeholder="Ex : gluten, lactose…" />
+          </div>
+
+          <div class="field">
+            <label for="reg-boisson">Votre boisson</label>
+            <div class="select-wrap">
+              <select id="reg-boisson">
+                <option value="">Choisir votre boisson…</option>
+                <optgroup label="🍷 Vins &amp; Spiritueux">
+                  <option value="Vin">Vin</option>
+                  <option value="Whisky">Whisky</option>
+                </optgroup>
+                <optgroup label="🍺 Bières">
+                  <option value="Heineken">Heineken</option>
+                  <option value="Primus">Primus</option>
+                  <option value="Castel">Castel</option>
+                  <option value="Turbo King">Turbo King</option>
+                  <option value="Tembo">Tembo</option>
+                  <option value="Mutzig">Mutzig</option>
+                  <option value="Nkoy">Nkoy</option>
+                  <option value="Nkoy Likofi">Nkoy Likofi</option>
+                  <option value="Beauford">Beauford</option>
+                  <option value="Savana">Savana</option>
+                </optgroup>
+                <optgroup label="🥤 Softs &amp; Jus">
+                  <option value="Coca">Coca</option>
+                  <option value="Fanta">Fanta</option>
+                  <option value="Sprite">Sprite</option>
+                  <option value="Top">Top</option>
+                  <option value="Bavaria">Bavaria</option>
+                  <option value="Maltina">Maltina</option>
+                  <option value="Energy Malt">Energy Malt</option>
+                  <option value="Vitalo">Vitalo</option>
+                  <option value="Eau">Eau</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="btn-register">
+            Confirmer ma présence
+          </button>
+          <p class="error-msg" id="reg-error"></p>
+        </form>
+      </div>
+
+      <!-- ── Panel B : Reconnexion (autre appareil) ── -->
+      <div id="panel-reconnect" class="hidden">
+        <p class="reconnect-intro">
+          Vous vous êtes déjà inscrit(e) ? Entrez votre nom et prénom
+          pour retrouver votre accès depuis cet appareil.
+        </p>
+        <form id="recon-form" novalidate>
+          <div class="field">
+            <label for="recon-prenom">Prénom</label>
+            <input type="text" id="recon-prenom" placeholder="Votre prénom"
+                   autocomplete="given-name" />
+          </div>
+          <div class="field">
+            <label for="recon-nom">Nom</label>
+            <input type="text" id="recon-nom" placeholder="Votre nom"
+                   autocomplete="family-name" />
+          </div>
+          <button type="submit" class="btn-submit" id="btn-reconnect">
+            Accéder au programme
+          </button>
+          <p class="error-msg" id="recon-error"></p>
+        </form>
+      </div>
+
+      <a href="/" class="back-link">← Retour à l'accueil</a>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       PROGRAMME (après inscription)
+  ════════════════════════════════════ -->
+  <div id="program-view" class="hidden">
+
+    <div class="content-header">
+      <p class="content-welcome" id="welcome-msg">Bienvenue !</p>
+      <p class="content-subtitle">Soirée · 17 juillet 2026</p>
+
+      <!-- Compte à rebours (vue programme) -->
+      <div class="countdown-soiree">
+        <div class="cd-unit"><span class="cd-num cd-j">--</span><span class="cd-label">Jours</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-unit"><span class="cd-num cd-h">--</span><span class="cd-label">Heures</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-unit"><span class="cd-num cd-m">--</span><span class="cd-label">Min</span></div>
+        <span class="cd-sep">:</span>
+        <div class="cd-unit"><span class="cd-num cd-s">--</span><span class="cd-label">Sec</span></div>
+      </div>
+
+      <div class="table-badge">
+        <span class="table-label">Votre table</span>
+        <span class="table-name" id="table-name">À définir</span>
+        <span class="table-anecdote" id="table-anecdote"></span>
+      </div>
+      <p class="boisson-display" id="boisson-display"></p>
+    </div>
+
+    <div class="divider" aria-hidden="true">
+      <span class="dv-line"></span><span class="dv-icon">✦</span><span class="dv-line"></span>
+    </div>
+
+    <!-- Programme (à remplir) -->
+    <div class="content-card">
+      <h2>Programme de la soirée</h2>
+      <p>Le programme détaillé sera disponible prochainement.<br>
+      Revenez consulter cette page pour découvrir le déroulé de la soirée.</p>
+    </div>
+
+    <!-- Lieu -->
+    <div class="content-card">
+      <h2>Lieu &amp; Accès</h2>
+      <p style="margin-bottom:14px;">
+        📍 177 Kabalo, Lingwala<br>
+        Kinshasa, République Démocratique du Congo
+      </p>
+      <a href="https://maps.app.goo.gl/qtSHGBDSx8XtbN298?g_st=aw"
+         target="_blank" rel="noopener noreferrer"
+         style="display:inline-flex;align-items:center;gap:8px;
+                font-family:'Cormorant Garamond',serif;font-size:0.95rem;
+                font-weight:600;letter-spacing:0.06em;color:#FFFFFF;
+                background:linear-gradient(135deg,#B22222 0%,#C9A84C 100%);
+                border-radius:8px;padding:10px 20px;text-decoration:none;
+                transition:opacity 0.2s;" onmouseover="this.style.opacity='.85'"
+                onmouseout="this.style.opacity='1'">
+        🗺️ Ouvrir dans Google Maps
+      </a>
+      <div style="margin-top:18px;border-radius:10px;overflow:hidden;border:1px solid rgba(201,168,76,0.3);">
+        <iframe
+          src="https://maps.google.com/maps?q=177+Kabalo+Lingwala+Kinshasa&output=embed&z=15"
+          width="100%" height="200" style="border:0;display:block;"
+          allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- Cadeaux -->
+    <div class="content-card" style="
+      background:linear-gradient(135deg,#B22222 0%,#8B1515 60%,#6B0F0F 100%) !important;
+      border:1.5px solid rgba(212,175,55,0.6) !important;
+      box-shadow:0 8px 40px rgba(178,34,34,0.35),inset 0 1px 0 rgba(255,255,255,0.08) !important;
+      text-align:center; position:relative; overflow:hidden; padding:22px 36px !important;">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% -10%,rgba(212,175,55,0.18) 0%,transparent 70%);pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;">
+        <span style="font-size:1.9rem;line-height:1;">💝</span>
+        <h2 style="color:#D4AF37 !important;font-size:1.9rem !important;text-shadow:0 2px 8px rgba(0,0,0,0.2);margin-bottom:0 !important;">Cadeaux</h2>
+      </div>
+      <div style="width:60px;height:1.5px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.7),transparent);margin:0 auto 10px;"></div>
+      <p style="font-size:1.18rem;color:rgba(255,248,230,0.95);line-height:1.6;font-style:italic;font-weight:300;">
+        Les mariés privilégient les cadeaux en argent.
+      </p>
+    </div>
+
+    <!-- ── Galerie photos ── -->
+    <div class="divider" aria-hidden="true">
+      <span class="dv-line"></span><span class="dv-icon">✦</span><span class="dv-line"></span>
+    </div>
+
+    <div class="gallery-section">
+      <p class="gallery-intro">Nos instants précieux</p>
+      <p class="gallery-sub">Quelques souvenirs qui nous ont menés jusqu'ici</p>
+
+      <div class="carousel-wrap">
+        <button class="carousel-btn prev" id="car-prev" aria-label="Précédent">‹</button>
+
+        <div class="carousel-track" id="car-track">
+          <img src="/images/galerie1.jpeg" alt="Souvenir 1" loading="lazy" data-index="0" />
+          <img src="/images/galerie2.jpeg" alt="Souvenir 2" loading="lazy" data-index="1" />
+          <img src="/images/galerie3.jpeg" alt="Souvenir 3" loading="lazy" data-index="2" />
+          <img src="/images/galerie4.jpeg" alt="Souvenir 4" loading="lazy" data-index="3" />
+          <img src="/images/galerie5.jpeg" alt="Souvenir 5" loading="lazy" data-index="4" />
+          <img src="/images/galerie6.jpeg" alt="Souvenir 6" loading="lazy" data-index="5" />
+          <img src="/images/galerie7.jpeg" alt="Souvenir 7" loading="lazy" data-index="6" />
+          <img src="/images/galerie8.jpeg" alt="Souvenir 8" loading="lazy" data-index="7" />
+        </div>
+
+        <button class="carousel-btn next" id="car-next" aria-label="Suivant">›</button>
+      </div>
+
+      <div class="carousel-dots" id="car-dots">
+        <span class="active"></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox hidden" id="lightbox" role="dialog" aria-modal="true">
+      <button class="lightbox-close" id="lb-close" aria-label="Fermer">✕</button>
+      <button class="lightbox-prev"  id="lb-prev"  aria-label="Précédent">‹</button>
+      <img src="" alt="" id="lb-img" />
+      <button class="lightbox-next"  id="lb-next"  aria-label="Suivant">›</button>
+    </div>
+
+    <div class="divider" aria-hidden="true">
+      <span class="dv-line"></span><span class="dv-icon">✦</span><span class="dv-line"></span>
+    </div>
+
+    <div class="nav-links">
+      <a href="/" class="home-link">← Accueil</a>
+      <button class="btn-logout" id="btn-logout">Se déconnecter</button>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════
+       MODAL — Confirmation & Nom de table
+  ════════════════════════════════════ -->
+  <div id="table-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <span class="modal-flower">✿</span>
+      <p class="modal-welcome-text" id="modal-welcome">Bienvenue !</p>
+      <p class="modal-subtitle">Inscription confirmée · 17 juillet 2026</p>
+
+      <div class="modal-table-badge">
+        <span class="modal-table-label">Votre table</span>
+        <span class="modal-table-name" id="modal-table-name">À définir</span>
+        <span class="modal-anecdote"   id="modal-anecdote"></span>
+      </div>
+
+      <button class="modal-btn" id="modal-ok">Accéder au programme →</button>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+
+    var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzCGsowtXA9FPrTzpBHYegGEtL0_M-AguUYp_Z6d7GWP-7D7ahojqhLQrz-vvtyBKvGSQ/exec';
+    var SESSION_KEY = 'soiree_session_v1';
+
+    /* ─── Anecdotes des tables (souvenirs du couple) ─── */
+    var TABLES = {
+      'CORNETTE PALACE':              'c\'est ici que le mot « je t\'aime » a été prononcé pour la première fois',
+      'CAFÉ LE BON COIN':             'rendez-vous improvisé',
+      'COLLINE DE MARRAKECH':         'regardé la vue d\'en haut à travers l\'épaule de l\'être aimé',
+      'LE CERCLE BILLARD':            'un rendez-vous détente autour des boules de billard',
+      'BOWLING MARRAKECH':            'une partie détente',
+      'MENARA MALL':                  'la détente continue',
+      'BURGER KING MENARA':           'un petit creux',
+      'MUSÉE DES EAUX DE MARRAKECH':  'et si on s\'est laissé noyer dans l\'océan d\'amour',
+      'MAC DONALD\'S MARRAKECH':      'un petit creux amoureux',
+      'RESTAURANT EL GEORGE':         'Noël en bonne compagnie',
+      'PARK PALOZA MARRAKECH':        'un rendez-vous en amoureux avec la nature',
+      'ARRIBAT CENTER':               'promenade et détente en amoureux',
+      'MARINA':                       'grignotage en amoureux',
+      'MUSÉE DE LA PHOTOGRAPHIE RABAT': 'se faire photographier avec sa personne préférée',
+      'VILLA BERECHID':               '…',
+      'PARK SINDIBAD':                'entourés de nos amis',
+      'RESTAURANT DIWAN':             'l\'amour en charisme légendaire autour d\'un plat — bon appétit',
+      'CINÉMA MEGARAMA RABAT':        'un film en amoureux',
+      'RESTAURANT DAWLIZ':            'l\'anniversaire de monsieur',
+      'RESTAURANT FARAH':             'bonne année autour d\'un plat',
+      'MAC DONALD CASABLANCA':        'un petit creux à la gare',
+      'RESTAURANT MARRIOTT':          '',
+      'CINÉ PATHÉ CASABLANCA':        '',
+      'RESTAURANT CABESTAN':          '',
+      'VILLA TOURIVER':               'expo de mon roman — apprécie le nouveau chapitre de ta vie',
+      'RESTAURANT RABAT':             '',
+      'JARDIN NOUZHAT HASSAN':        'une séance photo s\'impose',
+      'AÉROPORT MOHAMMED V':          'départ Kinshasa',
+      'VILLA M\'ACCOMPAGNE':          'bénédiction nuptiale et civil',
+      'PLAZZA':                       'soirée coutumière',
+      'PALMERAIE':                    'soirée dansante'
+    };
+    /* Mode dev : localhost ET toutes les IP locales (WiFi téléphone) */
+    var _h = window.location.hostname;
+    var IS_DEV = (_h === 'localhost' || _h === '127.0.0.1' ||
+                  /^192\.168\./.test(_h) || /^10\./.test(_h) ||
+                  /^172\.(1[6-9]|2\d|3[01])\./.test(_h));
+
+    /* ─── Session (permanente) ─── */
+    function getSession() {
+      try { var r = localStorage.getItem(SESSION_KEY); return r ? JSON.parse(r) : null; }
+      catch(e) { return null; }
+    }
+    function saveSession(d) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        prenom:  d.prenom,
+        nom:     d.nom,
+        table:   d.table   || null,
+        boisson: d.boisson || null,
+        token:   d.token
+      }));
+    }
+    function clearSession() { localStorage.removeItem(SESSION_KEY); }
+
+    function getDeviceToken() {
+      var t = localStorage.getItem('_dtoken');
+      if (!t) { t = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('_dtoken', t); }
+      return t;
+    }
+
+    /* ─── Éléments DOM ─── */
+    var gate        = document.getElementById('register-gate');
+    var view        = document.getElementById('program-view');
+    var welcomeMsg  = document.getElementById('welcome-msg');
+    var tableNameEl = document.getElementById('table-name');
+
+    /* ─── Première lettre majuscule, reste minuscule ─── */
+    function toTitleCase(str) {
+      if (!str) return str;
+      return str.toLowerCase().replace(/(?:^|\s|'|-)[a-zàâäéèêëîïôùûüç]/g, function(c) {
+        return c.toUpperCase();
+      });
+    }
+
+    /* ─── Résoudre l'anecdote d'une table ─── */
+    function getAnecdote(tableName) {
+      if (!tableName) return '';
+      return TABLES[tableName.toUpperCase()] || TABLES[tableName] || '';
+    }
+
+    /* ─── Afficher le programme (depuis session ou modal Ok) ─── */
+    function showProgram(s) {
+      gate.style.display = 'none';
+      document.getElementById('table-modal').classList.add('hidden');
+      view.classList.remove('hidden');
+      welcomeMsg.textContent = 'Bienvenue, ' + (s.prenom || s.nom || 'cher(e) invité(e)') + ' !';
+
+      var rawTable  = s.table || null;
+      var tableName = rawTable ? toTitleCase(rawTable) : 'À définir';
+      tableNameEl.textContent = tableName;
+
+      var anecdoteEl = document.getElementById('table-anecdote');
+      if (anecdoteEl) {
+        var anecdote = rawTable ? getAnecdote(rawTable) : '';
+        anecdoteEl.textContent = anecdote ? '✦ ' + anecdote : '';
+      }
+
+      /* Boisson */
+      var boissonEl = document.getElementById('boisson-display');
+      if (boissonEl && s.boisson) {
+        boissonEl.textContent = '🥂 ' + s.boisson;
+      }
+    }
+
+    /* ─── Afficher le modal de confirmation (premier enregistrement) ─── */
+    function showModal(s) {
+      var modal = document.getElementById('table-modal');
+      document.getElementById('modal-welcome').textContent =
+        'Bienvenue, ' + (s.prenom || 'cher(e) invité(e)') + ' !';
+
+      var rawTable  = s.table || null;
+      var tableName = rawTable ? toTitleCase(rawTable) : 'À définir';
+      document.getElementById('modal-table-name').textContent = tableName;
+
+      var anecdote = rawTable ? getAnecdote(rawTable) : '';
+      document.getElementById('modal-anecdote').textContent =
+        anecdote ? '✦ ' + anecdote : (!rawTable ? 'Votre table vous sera communiquée prochainement.' : '');
+
+      modal.classList.remove('hidden');
+
+      /* Bouton Ok → programme */
+      document.getElementById('modal-ok').onclick = function () {
+        showProgram(s);
+      };
+    }
+
+    /* ─── Vérification au chargement ─── */
+    var session = getSession();
+    if (session) showProgram(session);
+
+    /* ─── Onglets ─── */
+    var tabReg    = document.getElementById('tab-register');
+    var tabRecon  = document.getElementById('tab-reconnect');
+    var panelReg  = document.getElementById('panel-register');
+    var panelRec  = document.getElementById('panel-reconnect');
+
+    tabReg.addEventListener('click', function () {
+      tabReg.classList.add('active');   tabRecon.classList.remove('active');
+      panelReg.classList.remove('hidden'); panelRec.classList.add('hidden');
+    });
+    tabRecon.addEventListener('click', function () {
+      tabRecon.classList.add('active'); tabReg.classList.remove('active');
+      panelRec.classList.remove('hidden'); panelReg.classList.add('hidden');
+    });
+
+    /* ─── Helpers ─── */
+    function setBtn(btn, loading, label) {
+      btn.disabled = loading;
+      btn.innerHTML = loading ? '<span class="loader"></span>Vérification…' : label;
+    }
+    function showErr(id, msg) { document.getElementById(id).textContent = msg; }
+
+    /* ─────────────────────────────────
+       FORMULAIRE INSCRIPTION
+    ───────────────────────────────── */
+    document.getElementById('reg-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      showErr('reg-error', '');
+
+      var prenom   = document.getElementById('reg-prenom').value.trim();
+      var nom      = document.getElementById('reg-nom').value.trim();
+      var sexe     = document.getElementById('reg-sexe').value;
+      var relation = document.getElementById('reg-relation').value;
+      var tel      = document.getElementById('reg-tel').value.trim();
+      var allergie = document.getElementById('reg-allergie').value.trim();
+      var boisson  = document.getElementById('reg-boisson').value;
+
+      if (!prenom || !nom) { showErr('reg-error', 'Veuillez renseigner votre nom et prénom.'); return; }
+      if (!sexe)           { showErr('reg-error', 'Veuillez choisir une civilité.'); return; }
+      if (!relation)       { showErr('reg-error', 'Veuillez indiquer votre relation avec les mariés.'); return; }
+      if (!boisson)        { showErr('reg-error', 'Veuillez choisir votre boisson.'); return; }
+
+      var btn = document.getElementById('btn-register');
+      setBtn(btn, true, 'Confirmer ma présence');
+
+      try {
+        var token = getDeviceToken();
+
+        /* ── DEV : simulation locale avec affectation de table par relation ── */
+        if (IS_DEV) {
+          var DEV_TABLE_MAP = {
+            'ami_cyntiche':    'CORNETTE PALACE',
+            'ami_audrey':      'COLLINE DE MARRAKECH',
+            'famille_cyntiche': 'PARK SINDIBAD',
+            'famille_audrey':  'CINÉMA MEGARAMA RABAT'
+          };
+          var devTable = DEV_TABLE_MAP[relation] || 'CORNETTE PALACE';
+          var devSession = { prenom: prenom, nom: nom, table: devTable, boisson: boisson, token: token };
+          saveSession(devSession);
+          showModal(devSession);
+          return;
+        }
+
+        /* ── PROD ── */
+        var resp = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            action: 'registerSoiree',
+            prenom, nom, sexe, relation, tel, allergie, boisson,
+            deviceToken: token
+          })
+        });
+        var res = await resp.json();
+
+        if (res.success) {
+          var s = { prenom: res.prenom || prenom, nom: nom, table: res.table, boisson: boisson, token: token };
+          saveSession(s);
+          showModal(s);
+        } else {
+          showErr('reg-error', res.message || 'Une erreur est survenue. Réessayez.');
+        }
+
+      } catch(err) {
+        showErr('reg-error', 'Erreur réseau. Réessayez dans quelques instants.');
+      } finally {
+        setBtn(btn, false, 'Confirmer ma présence');
+      }
+    });
+
+    /* ─────────────────────────────────
+       FORMULAIRE RECONNEXION
+    ───────────────────────────────── */
+    document.getElementById('recon-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      showErr('recon-error', '');
+
+      var prenom = document.getElementById('recon-prenom').value.trim();
+      var nom    = document.getElementById('recon-nom').value.trim();
+
+      if (!prenom || !nom) { showErr('recon-error', 'Veuillez renseigner votre nom et prénom.'); return; }
+
+      var btn = document.getElementById('btn-reconnect');
+      setBtn(btn, true, 'Accéder au programme');
+
+      try {
+        var token = getDeviceToken();
+
+        /* ── DEV ── */
+        if (IS_DEV) {
+          saveSession({ prenom, nom, table: 'Table Jasmin', token });
+          showProgram({ prenom, nom, table: 'Table Jasmin' });
+          return;
+        }
+
+        /* ── PROD ── */
+        var resp = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ action: 'reconnectSoiree', prenom, nom, deviceToken: token })
+        });
+        var res = await resp.json();
+
+        if (res.success) {
+          saveSession({ prenom: res.prenom || prenom, nom, table: res.table, token });
+          showProgram({ prenom: res.prenom || prenom, nom, table: res.table });
+        } else {
+          showErr('recon-error', res.message || 'Aucune inscription trouvée pour ces nom et prénom.');
+        }
+
+      } catch(err) {
+        showErr('recon-error', 'Erreur réseau. Réessayez dans quelques instants.');
+      } finally {
+        setBtn(btn, false, 'Accéder au programme');
+      }
+    });
+
+    /* ─── Carousel + Lightbox ─── */
+    (function () {
+      var track    = document.getElementById('car-track');
+      var dots     = Array.from(document.querySelectorAll('#car-dots span'));
+      var imgs     = Array.from(document.querySelectorAll('#car-track img'));
+      var lightbox = document.getElementById('lightbox');
+      var lbImg    = document.getElementById('lb-img');
+      var lbCurrent = 0;
+
+      /* ── Dots : mise à jour selon la photo visible ── */
+      function updateDots() {
+        if (!track || imgs.length === 0) return;
+        var imgW    = imgs[0].offsetWidth + 12; /* largeur + gap */
+        var idx     = Math.round(track.scrollLeft / imgW);
+        dots.forEach(function (d, i) {
+          d.classList.toggle('active', i === idx);
+        });
+      }
+      track.addEventListener('scroll', updateDots, { passive: true });
+      dots.forEach(function (d, i) {
+        d.addEventListener('click', function () {
+          var imgW = imgs[0].offsetWidth + 12;
+          track.scrollTo({ left: i * imgW, behavior: 'smooth' });
+        });
+      });
+
+      /* ── Boutons prev / next ── */
+      document.getElementById('car-prev').addEventListener('click', function () {
+        var imgW = imgs[0].offsetWidth + 12;
+        track.scrollBy({ left: -imgW, behavior: 'smooth' });
+      });
+      document.getElementById('car-next').addEventListener('click', function () {
+        var imgW = imgs[0].offsetWidth + 12;
+        track.scrollBy({ left: imgW, behavior: 'smooth' });
+      });
+
+      /* ── Drag-to-scroll (souris) ── */
+      var isDown = false, startX, scrollStart;
+      track.addEventListener('mousedown', function (e) {
+        isDown = true; startX = e.pageX; scrollStart = track.scrollLeft;
+        track.style.userSelect = 'none';
+      });
+      document.addEventListener('mousemove', function (e) {
+        if (!isDown) return;
+        track.scrollLeft = scrollStart - (e.pageX - startX);
+      });
+      document.addEventListener('mouseup', function () {
+        isDown = false; track.style.userSelect = '';
+      });
+
+      /* ── Lightbox ── */
+      function lbOpen(idx) {
+        lbCurrent = idx;
+        lbImg.src = imgs[idx].src;
+        lbImg.alt = imgs[idx].alt;
+        lightbox.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+      function lbClose() {
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+      function lbPrev() { lbOpen((lbCurrent - 1 + imgs.length) % imgs.length); }
+      function lbNext() { lbOpen((lbCurrent + 1) % imgs.length); }
+
+      imgs.forEach(function (img) {
+        img.addEventListener('click', function () { lbOpen(Number(img.dataset.index)); });
+      });
+      document.getElementById('lb-close').addEventListener('click', lbClose);
+      document.getElementById('lb-prev').addEventListener('click', lbPrev);
+      document.getElementById('lb-next').addEventListener('click', lbNext);
+      lightbox.addEventListener('click', function (e) { if (e.target === lightbox) lbClose(); });
+      document.addEventListener('keydown', function (e) {
+        if (lightbox.classList.contains('hidden')) return;
+        if (e.key === 'Escape')     lbClose();
+        if (e.key === 'ArrowLeft')  lbPrev();
+        if (e.key === 'ArrowRight') lbNext();
+      });
+    })();
+
+    /* ─── Déconnexion ─── */
+    document.getElementById('btn-logout').addEventListener('click', function () {
+      clearSession();
+      view.classList.add('hidden');
+      gate.style.display = 'flex';
+    });
+
+    /* ─────────────────────────────────
+       COMPTE À REBOURS — Soirée 17 juillet 2026
+       (mise à jour de tous les countdowns simultanément)
+    ───────────────────────────────── */
+    (function () {
+      var cible = new Date('2026-07-17T18:00:00').getTime();
+
+      function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+      function setAll(cls, val) {
+        document.querySelectorAll('.' + cls).forEach(function(el) {
+          el.textContent = val;
+        });
+      }
+
+      function tick() {
+        var diff = cible - Date.now();
+        if (diff <= 0) {
+          setAll('cd-j', '00'); setAll('cd-h', '00');
+          setAll('cd-m', '00'); setAll('cd-s', '00');
+          return;
+        }
+        setAll('cd-j', pad(Math.floor(diff / 86400000)));
+        setAll('cd-h', pad(Math.floor((diff % 86400000) / 3600000)));
+        setAll('cd-m', pad(Math.floor((diff % 3600000)  / 60000)));
+        setAll('cd-s', pad(Math.floor((diff % 60000)    / 1000)));
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    })();
+
+  })();
+  </script>
+
+</body>
+</html>

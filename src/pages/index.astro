@@ -1,0 +1,739 @@
+---
+// Page d'accueil — Mariage Audrey & Cyntiche
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mariage d'Audrey & Cyntiche — Juillet 2026" />
+  <title>Audrey & Cyntiche — Juillet 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #1E0A0A;
+    }
+
+    /* ══════════════════════════════════════════
+       FOND PRINCIPAL : fond.jpg aquarelle
+    ══════════════════════════════════════════ */
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: url('/images/fond2.jpg') center / cover no-repeat;
+    }
+
+    /* ══════════════════════════════════════════
+       FLEURS DÉCORATIVES (SVG fixe)
+    ══════════════════════════════════════════ */
+    .flowers-svg {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    /* ══════════════════════════════════════════
+       SPLIT LAYOUT
+    ══════════════════════════════════════════ */
+    .split {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 42% 58%; /* contenu plus large = texte moins serré à droite */
+      min-height: 100vh;
+    }
+
+    /* ── Colonne photo (sticky) ── */
+    .col-photo {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* PNG avec fond transparent — le couple flotte sur le fond aquarelle */
+    .col-photo img {
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center bottom;
+      display: block;
+    }
+
+    /* ── Colonne contenu ── */
+    .col-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;   /* texte aligné depuis la gauche (proche photo) */
+      text-align: left;
+      gap: 22px;
+      padding: 56px 48px 56px 24px; /* 24px seulement entre photo et texte */
+      min-height: 100vh;
+    }
+
+    /* ══════════════════════════════════════════
+       BIENVENUE + SOUS-TITRE
+    ══════════════════════════════════════════ */
+    .bienvenue {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(3.4rem, 5.8vw, 6rem);
+      font-weight: 400;
+      line-height: 1;
+      color: #1A0808;
+    }
+
+    .sous-titre {
+      font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+      font-style: italic;
+      font-weight: 300;
+      color: #7A4848;
+      letter-spacing: 0.06em;
+      line-height: 1.4;
+      margin-top: -6px;
+    }
+
+    /* ══════════════════════════════════════════
+       NOMS : même ligne sur desktop
+    ══════════════════════════════════════════ */
+    .names {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.6rem, 4.2vw, 5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      color: #1A0808;
+      display: flex;
+      flex-direction: row;       /* DESKTOP : une seule ligne */
+      align-items: baseline;
+      justify-content: flex-start;
+      gap: 0.28em;
+      flex-wrap: nowrap;
+    }
+
+    .amp {
+      color: #B22222;
+      font-size: 0.82em;
+      line-height: 1;
+    }
+
+    .tagline {
+      font-size: clamp(0.83rem, 1.4vw, 1rem);
+      font-style: italic;
+      font-weight: 300;
+      color: #9A5858;
+      line-height: 1.7;
+      max-width: 400px;
+    }
+
+    /* ══════════════════════════════════════════
+       SÉPARATEUR
+    ══════════════════════════════════════════ */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .dv-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(178,34,34,0.3) 30%,
+        rgba(212,175,55,0.55) 50%,
+        rgba(178,34,34,0.3) 70%,
+        transparent
+      );
+    }
+
+    .dv-icon { font-size: 1rem; color: rgba(178,34,34,0.42); line-height: 1; }
+
+    /* ══════════════════════════════════════════
+       COMPTE À REBOURS (police Arial)
+    ══════════════════════════════════════════ */
+    .cd-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .cd-title {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #AA7878;
+    }
+
+    .cd-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 4px;
+    }
+
+    .cd-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 58px;
+    }
+
+    .cd-num {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      color: #B22222;
+      line-height: 1;
+    }
+
+    .cd-lbl {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #CC9999;
+      margin-top: 4px;
+    }
+
+    .cd-sep {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 2.2rem;
+      color: #D4AF37;
+      line-height: 1.02;
+      padding: 0 2px;
+      opacity: 0.85;
+    }
+
+    /* ══════════════════════════════════════════
+       BOUTONS ENVELOPPE
+    ══════════════════════════════════════════ */
+    .invitations {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .env-link {
+      text-decoration: none;
+      display: block;
+      width: 205px;
+      flex-shrink: 0;
+    }
+
+    .env-link:focus-visible { outline: 3px solid #B22222; outline-offset: 6px; border-radius: 10px; }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      padding-bottom: 65%;
+      border-radius: 9px;
+      overflow: hidden;
+      box-shadow: 0 5px 22px rgba(0,0,0,0.14);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+    }
+
+    .env-link:hover .envelope {
+      transform: translateY(-7px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    }
+
+    .envelope.civil  { background: #FFFFFF; border: 1.5px solid #B22222; }
+    .envelope.soiree { background: #FFFDF6; border: 1.5px solid #C9A84C; }
+
+    .env-flap {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 56%;
+      clip-path: polygon(0% 0%, 100% 0%, 50% 70%);
+    }
+
+    .civil  .env-flap { background: #B22222; }
+    .soiree .env-flap { background: linear-gradient(135deg, #C0392B 0%, #C9A84C 60%, #B8900A 100%); }
+
+    .env-bottom {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 42%;
+      clip-path: polygon(0% 100%, 100% 100%, 50% 0%);
+    }
+
+    .civil  .env-bottom { background: rgba(178,34,34,0.05); }
+    .soiree .env-bottom { background: rgba(201,168,76,0.08); }
+
+    .env-seal {
+      position: absolute;
+      top: 39%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.15rem;
+      z-index: 2;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+
+    .civil  .env-seal { background: #B22222; color: #FFF; border: 2px solid rgba(255,255,255,0.5); }
+    .soiree .env-seal {
+      background: #C9A84C; color: #FFF;
+      border: 2px solid rgba(255,255,255,0.55);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2), 0 0 0 3px rgba(192,57,43,0.22);
+    }
+
+    .env-text {
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 48%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px; padding: 0 12px;
+      text-align: center;
+    }
+
+    .env-event { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em; line-height: 1.3; }
+    .civil  .env-event { color: #8B1515; }
+    .soiree .env-event { color: #8A6220; }
+    .env-date { font-size: 0.7rem; font-style: italic; font-weight: 300; color: #AA9080; }
+
+    /* ══════════════════════════════════════════
+       MOBILE (≤ 767px)
+    ══════════════════════════════════════════ */
+    @media (max-width: 767px) {
+
+      /* Fond spécifique mobile */
+      .page-bg {
+        background-image: url('/images/phone1.jpg');
+        background-position: center top;
+      }
+
+      .split {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        gap: 0;
+      }
+
+      /* Photo plus grande, colle directement au texte */
+      .col-photo {
+        position: static;
+        height: 72vw;
+        min-height: 280px;
+        width: 100%;
+        align-items: flex-end;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .col-photo img {
+        height: 100%;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        object-position: center bottom;
+      }
+
+      /* Texte collé juste après la photo */
+      .col-content {
+        align-items: center;
+        text-align: center;
+        padding: 6px 24px 56px;
+        gap: 14px;
+        min-height: auto;
+      }
+
+      /* Centrage mobile */
+      .bienvenue,
+      .sous-titre {
+        text-align: center;
+        width: 100%;
+      }
+
+      .cd-wrapper { align-items: center; }
+      .cd-row     { justify-content: center; }
+
+      /* Noms sur 3 lignes */
+      .names {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(3rem, 11vw, 4rem);
+        gap: 0;
+        line-height: 1.05;
+      }
+
+      .amp {
+        font-size: 0.65em;
+        line-height: 0.75;
+        display: block;
+        text-align: center;
+        width: 100%;
+      }
+
+      .divider { max-width: 260px; }
+      .cd-unit { min-width: 42px; }
+      .cd-sep  { font-size: 1.6rem; }
+
+      /* ── Enveloppes côte à côte ── */
+      .invitations {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .env-link {
+        width: calc(50% - 6px);
+        max-width: 155px;
+        flex-shrink: 1;
+      }
+
+      /* Texte enveloppe plus compact */
+      .env-event { font-size: 0.7rem; }
+      .env-date  { font-size: 0.6rem; }
+      .env-seal  { width: 38px; height: 38px; font-size: 0.95rem; }
+    }
+
+    /* ══════════════════════════════════════════
+       TABLETTE (768px – 1100px)
+    ══════════════════════════════════════════ */
+    @media (min-width: 768px) and (max-width: 1100px) {
+      .split { grid-template-columns: 44% 56%; }
+      .col-content { padding: 44px 36px 44px 20px; gap: 18px; }
+      .env-link { width: 185px; }
+    }
+
+    /* ══════════════════════════════════════════
+       GRAND ÉCRAN (≥ 1400px)
+    ══════════════════════════════════════════ */
+    @media (min-width: 1400px) {
+      .col-content { padding: 72px 96px 72px 100px; gap: 34px; }
+      .env-link { width: 230px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Fond aquarelle (fond.jpg) ── -->
+  <div class="page-bg"></div>
+
+  <!-- ══════════════════════════════════════════
+       FLEURS DÉCORATIVES (SVG fixe pleine page)
+  ══════════════════════════════════════════ -->
+  <svg class="flowers-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
+       xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <!-- Grande fleur (pivoine / rose) -->
+      <g id="fleur-lg">
+        <!-- Pétales extérieurs -->
+        <ellipse cx="0" cy="-32" rx="13" ry="28" fill="#E8889E" transform="rotate(0)"   opacity="0.88"/>
+        <ellipse cx="0" cy="-32" rx="13" ry="28" fill="#E8889E" transform="rotate(45)"  opacity="0.88"/>
+        <ellipse cx="0" cy="-32" rx="13" ry="28" fill="#E8889E" transform="rotate(90)"  opacity="0.88"/>
+        <ellipse cx="0" cy="-32" rx="13" ry="28" fill="#E8889E" transform="rotate(135)" opacity="0.88"/>
+        <ellipse cx="0" cy="-32" rx="13" ry="28" fill="#E8889E" transform="rotate(180)" opacity="0.88"/>
+        <ellipse cx="0" cy="-32" rx="13" ry="28" fill="#E8889E" transform="rotate(225)" opacity="0.88"/>
+        <ellipse cx="0" cy="-32" rx="13" ry="28" fill="#E8889E" transform="rotate(270)" opacity="0.88"/>
+        <ellipse cx="0" cy="-32" rx="13" ry="28" fill="#E8889E" transform="rotate(315)" opacity="0.88"/>
+        <!-- Pétales intérieurs -->
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#D0607A" transform="rotate(22.5)"  opacity="0.9"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#D0607A" transform="rotate(67.5)"  opacity="0.9"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#D0607A" transform="rotate(112.5)" opacity="0.9"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#D0607A" transform="rotate(157.5)" opacity="0.9"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#D0607A" transform="rotate(202.5)" opacity="0.9"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#D0607A" transform="rotate(247.5)" opacity="0.9"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#D0607A" transform="rotate(292.5)" opacity="0.9"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#D0607A" transform="rotate(337.5)" opacity="0.9"/>
+        <!-- Centre -->
+        <circle r="11" fill="#C0506C"/>
+        <circle r="5"  fill="#D4AF37" opacity="0.9"/>
+      </g>
+
+      <!-- Petite fleur -->
+      <g id="fleur-sm">
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#F0A8BC" transform="rotate(0)"   opacity="0.85"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#F0A8BC" transform="rotate(60)"  opacity="0.85"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#F0A8BC" transform="rotate(120)" opacity="0.85"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#F0A8BC" transform="rotate(180)" opacity="0.85"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#F0A8BC" transform="rotate(240)" opacity="0.85"/>
+        <ellipse cx="0" cy="-20" rx="9"  ry="18" fill="#F0A8BC" transform="rotate(300)" opacity="0.85"/>
+        <circle r="8"  fill="#C85878"/>
+        <circle r="3.5" fill="#D4AF37" opacity="0.85"/>
+      </g>
+
+      <!-- Feuille -->
+      <g id="feuille">
+        <path d="M0,-22 C12,-10 14,8 0,22 C-14,8 -12,-10 0,-22 Z" fill="#98B878" opacity="0.65"/>
+      </g>
+    </defs>
+
+    <!-- ═══ COIN HAUT-GAUCHE ═══ -->
+    <g transform="translate(68, 72)" opacity="0.58">
+      <use href="#fleur-lg"/>
+      <g transform="translate(80, -35) rotate(20)"><use href="#fleur-sm"/></g>
+      <g transform="translate(-38, 70) rotate(-15)"><use href="#fleur-sm"/></g>
+      <g transform="translate(50, 55) rotate(40)" opacity="0.7"><use href="#feuille" transform="scale(1.4)"/></g>
+      <g transform="translate(-20, -45) rotate(-30)" opacity="0.6"><use href="#feuille" transform="scale(1.1)"/></g>
+      <g transform="translate(120, 30) rotate(10)" opacity="0.45"><use href="#fleur-sm" transform="scale(0.6)"/></g>
+    </g>
+
+    <!-- ═══ COIN HAUT-DROIT ═══ -->
+    <g transform="translate(1372, 72)" opacity="0.56">
+      <use href="#fleur-lg" transform="rotate(18)"/>
+      <g transform="translate(-85, -30) rotate(-22)"><use href="#fleur-sm"/></g>
+      <g transform="translate(35, 72) rotate(12)"><use href="#fleur-sm"/></g>
+      <g transform="translate(-55, 52) rotate(-38)" opacity="0.7"><use href="#feuille" transform="scale(1.4)"/></g>
+      <g transform="translate(18, -48) rotate(25)" opacity="0.6"><use href="#feuille" transform="scale(1.1)"/></g>
+      <g transform="translate(-125, 28) rotate(-12)" opacity="0.42"><use href="#fleur-sm" transform="scale(0.6)"/></g>
+    </g>
+
+    <!-- ═══ COIN BAS-GAUCHE ═══ -->
+    <g transform="translate(68, 828)" opacity="0.55">
+      <use href="#fleur-lg" transform="rotate(-15)"/>
+      <g transform="translate(82, 30) rotate(18)"><use href="#fleur-sm"/></g>
+      <g transform="translate(-35, -68) rotate(-10)"><use href="#fleur-sm"/></g>
+      <g transform="translate(52, -52) rotate(35)" opacity="0.65"><use href="#feuille" transform="scale(1.4)"/></g>
+      <g transform="translate(-18, 45) rotate(-22)" opacity="0.55"><use href="#feuille" transform="scale(1.1)"/></g>
+    </g>
+
+    <!-- ═══ COIN BAS-DROIT ═══ -->
+    <g transform="translate(1372, 828)" opacity="0.57">
+      <use href="#fleur-lg" transform="rotate(22)"/>
+      <g transform="translate(-88, 28) rotate(-20)"><use href="#fleur-sm"/></g>
+      <g transform="translate(30, -70) rotate(15)"><use href="#fleur-sm"/></g>
+      <g transform="translate(-58, -48) rotate(-32)" opacity="0.65"><use href="#feuille" transform="scale(1.4)"/></g>
+      <g transform="translate(20, 48) rotate(18)" opacity="0.55"><use href="#feuille" transform="scale(1.1)"/></g>
+    </g>
+
+    <!-- ═══ MILIEU GAUCHE ═══ -->
+    <g transform="translate(38, 450)" opacity="0.42">
+      <use href="#fleur-lg" transform="scale(0.75) rotate(-8)"/>
+      <g transform="translate(65, -42) rotate(30)" opacity="0.8"><use href="#fleur-sm" transform="scale(0.7)"/></g>
+      <g transform="translate(-15, 58) rotate(-25)" opacity="0.7"><use href="#feuille" transform="scale(1.2)"/></g>
+    </g>
+
+    <!-- ═══ MILIEU DROIT ═══ -->
+    <g transform="translate(1402, 450)" opacity="0.42">
+      <use href="#fleur-lg" transform="scale(0.75) rotate(12)"/>
+      <g transform="translate(-68, -40) rotate(-28)" opacity="0.8"><use href="#fleur-sm" transform="scale(0.7)"/></g>
+      <g transform="translate(12, 60) rotate(22)" opacity="0.7"><use href="#feuille" transform="scale(1.2)"/></g>
+    </g>
+
+    <!-- ═══ HAUT CENTRE ═══ -->
+    <g transform="translate(720, 18)" opacity="0.32">
+      <use href="#fleur-sm" transform="scale(0.8) rotate(10)"/>
+      <g transform="translate(-52, 22) rotate(-18)" opacity="0.7"><use href="#fleur-sm" transform="scale(0.55)"/></g>
+      <g transform="translate(55, 20) rotate(22)" opacity="0.7"><use href="#fleur-sm" transform="scale(0.55)"/></g>
+    </g>
+
+    <!-- ═══ BAS CENTRE ═══ -->
+    <g transform="translate(720, 882)" opacity="0.32">
+      <use href="#fleur-sm" transform="scale(0.8) rotate(-10)"/>
+      <g transform="translate(-50, -20) rotate(15)" opacity="0.7"><use href="#fleur-sm" transform="scale(0.55)"/></g>
+      <g transform="translate(52, -18) rotate(-20)" opacity="0.7"><use href="#fleur-sm" transform="scale(0.55)"/></g>
+    </g>
+
+    <!-- ═══ PETITES FLEURS ÉPARPILLÉES ═══ -->
+    <g transform="translate(220, 145)" opacity="0.28" class="hide-mobile">
+      <use href="#fleur-sm" transform="scale(0.55) rotate(25)"/>
+    </g>
+    <g transform="translate(195, 755)" opacity="0.26" class="hide-mobile">
+      <use href="#fleur-sm" transform="scale(0.5) rotate(-35)"/>
+    </g>
+    <g transform="translate(1220, 138)" opacity="0.26" class="hide-mobile">
+      <use href="#fleur-sm" transform="scale(0.52) rotate(-18)"/>
+    </g>
+    <g transform="translate(1248, 762)" opacity="0.28" class="hide-mobile">
+      <use href="#fleur-sm" transform="scale(0.5) rotate(42)"/>
+    </g>
+
+    <!-- ═══ VEINES DORÉES ═══ -->
+    <path d="M 155 0 C 205 88, 285 140, 340 258 S 398 440, 452 548 S 492 702, 558 900"
+          stroke="rgba(212,175,55,0.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M 0 192 C 98 222, 232 198, 378 254 S 565 318, 712 280 S 895 222, 1092 268 S 1308 328, 1440 295"
+          stroke="rgba(212,175,55,0.36)" stroke-width="1" fill="none" stroke-linecap="round"/>
+    <path d="M 920 0 C 958 74, 996 148, 1018 232 S 1058 395, 1108 502 S 1158 638, 1218 778 S 1278 865, 1332 900"
+          stroke="rgba(212,175,55,0.44)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Paillettes dorées coins -->
+    <g opacity="0.72">
+      <circle cx="50"   cy="40"  r="2.5" fill="#D4AF37"/>
+      <circle cx="72"   cy="24"  r="1.5" fill="#D4AF37"/>
+      <circle cx="36"   cy="64"  r="2"   fill="#D4AF37"/>
+      <circle cx="96"   cy="50"  r="1.5" fill="#D4AF37"/>
+      <circle cx="64"   cy="18"  r="1"   fill="#D4AF37"/>
+      <circle cx="115"  cy="32"  r="2"   fill="#D4AF37"/>
+    </g>
+    <g opacity="0.68">
+      <circle cx="1370" cy="38"  r="2.5" fill="#D4AF37"/>
+      <circle cx="1390" cy="56"  r="1.5" fill="#D4AF37"/>
+      <circle cx="1350" cy="60"  r="2"   fill="#D4AF37"/>
+      <circle cx="1410" cy="40"  r="1"   fill="#D4AF37"/>
+      <circle cx="1330" cy="46"  r="1.5" fill="#D4AF37"/>
+    </g>
+    <g opacity="0.65">
+      <circle cx="42"   cy="840" r="2"   fill="#D4AF37"/>
+      <circle cx="66"   cy="858" r="1.5" fill="#D4AF37"/>
+      <circle cx="90"   cy="844" r="2"   fill="#D4AF37"/>
+      <circle cx="1380" cy="848" r="2.5" fill="#D4AF37"/>
+      <circle cx="1400" cy="866" r="1.5" fill="#D4AF37"/>
+      <circle cx="1360" cy="862" r="2"   fill="#D4AF37"/>
+      <circle cx="1420" cy="836" r="1"   fill="#D4AF37"/>
+    </g>
+  </svg>
+
+  <!-- ══════════════════════════════════════════
+       CONTENU PRINCIPAL
+  ══════════════════════════════════════════ -->
+  <div class="split">
+
+    <!-- ── Colonne gauche : Photo PNG (fond transparent) ── -->
+    <div class="col-photo">
+      <img
+        src="/images/photo1.png"
+        alt="Audrey & Cyntiche"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+
+    <!-- ── Colonne droite : Contenu ── -->
+    <div class="col-content">
+
+      <!-- Bienvenue -->
+      <p class="bienvenue">Bienvenue</p>
+      <p class="sous-titre">au mariage de</p>
+
+      <!-- Noms : même ligne desktop / 3 lignes mobile -->
+      <h1 class="names">
+        <span>Audrey</span>
+        <span class="amp">&amp;</span>
+        <span>Cyntiche</span>
+      </h1>
+
+      <!-- Tagline -->
+      <p class="tagline">Au sillage d'un amour qui renaît chaque jour,<br>
+      rejoignez-nous pour célébrer ce conte de fées.</p>
+
+      <!-- Séparateur -->
+      <div class="divider" aria-hidden="true">
+        <span class="dv-line"></span>
+        <span class="dv-icon">✿</span>
+        <span class="dv-line"></span>
+      </div>
+
+      <!-- Compte à rebours (Arial) -->
+      <div class="cd-wrapper" aria-live="polite">
+        <span class="cd-title">Mariage civil dans</span>
+        <div class="cd-row">
+          <div class="cd-unit">
+            <span class="cd-num" id="cd-j">—</span>
+            <span class="cd-lbl">jours</span>
+          </div>
+          <span class="cd-sep" aria-hidden="true">:</span>
+          <div class="cd-unit">
+            <span class="cd-num" id="cd-h">—</span>
+            <span class="cd-lbl">heures</span>
+          </div>
+          <span class="cd-sep" aria-hidden="true">:</span>
+          <div class="cd-unit">
+            <span class="cd-num" id="cd-m">—</span>
+            <span class="cd-lbl">min</span>
+          </div>
+          <span class="cd-sep" aria-hidden="true">:</span>
+          <div class="cd-unit">
+            <span class="cd-num" id="cd-s">—</span>
+            <span class="cd-lbl">sec</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Séparateur -->
+      <div class="divider" aria-hidden="true">
+        <span class="dv-line"></span>
+        <span class="dv-icon">✿</span>
+        <span class="dv-line"></span>
+      </div>
+
+      <!-- Boutons enveloppe (centrés) -->
+      <div class="invitations" aria-label="Nos événements">
+
+        <a href="/civil" class="env-link" aria-label="Mariage Civil et Bénédiction — 10 juillet 2026">
+          <div class="envelope civil">
+            <div class="env-flap"></div>
+            <div class="env-bottom"></div>
+            <div class="env-seal">AC</div>
+            <div class="env-text">
+              <span class="env-event">Mariage Civil &amp; Bénédiction</span>
+              <span class="env-date">10 juillet 2026</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="/soiree" class="env-link" aria-label="Soirée — 17 juillet 2026">
+          <div class="envelope soiree">
+            <div class="env-flap"></div>
+            <div class="env-bottom"></div>
+            <div class="env-seal">AC</div>
+            <div class="env-text">
+              <span class="env-event">Soirée</span>
+              <span class="env-date">17 juillet 2026</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div><!-- /col-content -->
+  </div><!-- /split -->
+
+  <script>
+    (function () {
+      var target = new Date('2026-07-10T00:00:00');
+      function pad(n) { return String(n).padStart(2, '0'); }
+      function tick() {
+        var diff = target - new Date();
+        if (diff <= 0) {
+          var w = document.querySelector('.cd-wrapper');
+          if (w) w.innerHTML = '<span class="cd-title" style="color:#B22222;font-size:1rem;">C\'est le grand jour !</span>';
+          return;
+        }
+        document.getElementById('cd-j').textContent = pad(Math.floor(diff / 86400000));
+        document.getElementById('cd-h').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+        document.getElementById('cd-m').textContent = pad(Math.floor((diff % 3600000) / 60000));
+        document.getElementById('cd-s').textContent = pad(Math.floor((diff % 60000) / 1000));
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+
+</body>
+</html>
