@@ -17,5 +17,5 @@ Thumbs.db
 # Scripts utilitaires (pas nécessaires en prod)
 compress-galerie.mjs
 
-# Dossier source images (non compressées)
-images/
+# Dossier source images brutes à la racine (non compressées)
+/images/
