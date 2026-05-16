@@ -1176,7 +1176,32 @@
 
     /* ─── Vérification au chargement ─── */
     var session = getSession();
-    if (session) showProgram(session);
+    if (session) {
+      /* Affiche immédiatement les données en cache */
+      showProgram(session);
+
+      /* Rafraîchit silencieusement la table depuis Sheets (si les mariés l'ont modifiée) */
+      if (!IS_DEV) {
+        fetch(APPS_SCRIPT_URL, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ action: 'reconnectSoiree', prenom: session.prenom, nom: session.nom, deviceToken: session.token })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.success && res.table && res.table !== session.table) {
+            /* La table a changé dans Sheets → on met à jour silencieusement */
+            session.table = res.table;
+            saveSession(session);
+            var rawTable = res.table;
+            document.getElementById('table-name').textContent = toTitleCase(rawTable);
+            var anecdoteEl = document.getElementById('table-anecdote');
+            if (anecdoteEl) anecdoteEl.textContent = getAnecdote(rawTable) ? '✦ ' + getAnecdote(rawTable) : '';
+          }
+        })
+        .catch(function() { /* silencieux — pas bloquant */ });
+      }
+    }
 
     /* ─── Onglets ─── */
     var tabReg    = document.getElementById('tab-register');
