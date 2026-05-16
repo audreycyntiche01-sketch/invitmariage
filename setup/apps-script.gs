@@ -318,3 +318,26 @@ function jsonResponse(obj) {
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+/* ════════════════════════════════════════════════════════
+   FONCTION DE TEST — exécuter dans l'éditeur pour vérifier
+   ════════════════════════════════════════════════════════ */
+function testConnexion() {
+  try {
+    var ss = SpreadsheetApp.openById(SHEET_ID);
+    Logger.log('✅ Fichier Sheets ouvert : ' + ss.getName());
+
+    var sheetCodes = ss.getSheetByName(SHEET_NAME_CODES);
+    Logger.log(sheetCodes ? '✅ Onglet "' + SHEET_NAME_CODES + '" trouvé' : '❌ Onglet "' + SHEET_NAME_CODES + '" INTROUVABLE');
+
+    var sheetSoiree = ss.getSheetByName(SHEET_NAME_SOIREE);
+    Logger.log(sheetSoiree ? '✅ Onglet "' + SHEET_NAME_SOIREE + '" trouvé' : '❌ Onglet "' + SHEET_NAME_SOIREE + '" INTROUVABLE');
+
+    /* Simule une validation de code */
+    var result = validateCode('AC-4827', 'test-device-123');
+    Logger.log('validateCode : ' + result.getContent());
+
+  } catch(err) {
+    Logger.log('❌ ERREUR : ' + err.message);
+  }
+}
