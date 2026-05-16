@@ -210,8 +210,11 @@ function registerSoiree(data) {
   var assignedTable = assignTable(relation, rows);
 
   /* ── Écriture dans le Sheets ── */
+  /* Préfixe apostrophe sur tel pour forcer le texte (évite #ERROR! avec les +) */
+  var telStr = tel ? "'" + tel : '';
+
   sheet.appendRow([
-    prenom, nom, sexe, allergie, tel, relation, boisson,
+    prenom, nom, sexe, allergie, telStr, relation, boisson,
     assignedTable || '',   /* H : table (auto-affectée) */
     new Date(),            /* I : date_inscription */
     token,                 /* J : device_token */
