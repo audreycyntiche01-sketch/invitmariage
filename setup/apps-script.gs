@@ -89,6 +89,13 @@ var COL = {
 };
 
 /* ────────────────────────────────────────────────────────
+   Point d'entrée OPTIONS (preflight CORS)
+──────────────────────────────────────────────────────── */
+function doGet(e) {
+  return jsonResponse({ success: true, message: 'API opérationnelle' });
+}
+
+/* ────────────────────────────────────────────────────────
    Point d'entrée POST
 ──────────────────────────────────────────────────────── */
 function doPost(e) {
@@ -96,9 +103,9 @@ function doPost(e) {
     var data   = JSON.parse(e.postData.contents);
     var action = data.action;
 
-    if (action === 'validateCode')    return validateCode(data.code, data.deviceToken);
-    if (action === 'registerSoiree') return registerSoiree(data);
-    if (action === 'reconnectSoiree') return reconnectSoiree(data.prenom, data.nom, data.deviceToken);
+    if (action === 'validateCode')     return validateCode(data.code, data.deviceToken);
+    if (action === 'registerSoiree')   return registerSoiree(data);
+    if (action === 'reconnectSoiree')  return reconnectSoiree(data.prenom, data.nom, data.deviceToken);
 
     return jsonResponse({ success: false, message: 'Action inconnue' });
 
