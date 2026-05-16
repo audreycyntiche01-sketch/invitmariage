@@ -703,7 +703,7 @@
         var resp = await fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           body: JSON.stringify({ action: 'validateCode', code: code, deviceToken: deviceToken }),
-          headers: { 'Content-Type': 'text/plain' } /* évite le preflight CORS */
+          headers: { 'Content-Type': 'application/json' }
         });
 
         var result = await resp.json();
