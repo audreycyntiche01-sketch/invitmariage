@@ -689,116 +689,6 @@
       .content-card { padding: 24px 18px; }
       .table-badge  { padding: 14px 22px; }
     }
-    /* ── Programme de la soirée ── */
-    .prog-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      text-align: center;
-    }
-
-    .prog-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 18px 0;
-      border-bottom: 1px solid rgba(201, 168, 76, 0.18);
-    }
-    .prog-item:last-child { border-bottom: none; }
-
-    .prog-icon {
-      font-size: 2rem;
-      line-height: 1;
-    }
-
-    .prog-body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      text-align: center;
-    }
-
-    .prog-time {
-      font-family: Arial, 'Helvetica Neue', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      color: #C9A84C;
-      text-transform: uppercase;
-    }
-
-    .prog-title {
-      font-size: clamp(1.2rem, 2.5vw, 1.45rem);
-      font-weight: 600;
-      color: #1A0808;
-      line-height: 1.3;
-    }
-
-    .prog-note {
-      font-size: 1.05rem;
-      font-style: italic;
-      font-weight: 300;
-      color: #7A4848;
-      margin-top: 2px;
-    }
-
-    /* ── Contacts organisateurs ── */
-    .org-contacts {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      margin-top: 6px;
-    }
-
-    .org-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 14px 0;
-    }
-
-    .org-role {
-      font-size: 0.82rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #8A6220;
-      font-weight: 700;
-    }
-
-    .org-name {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: #1A0808;
-    }
-
-    .org-name.mc {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #B22222;
-      letter-spacing: 0.04em;
-    }
-
-    .org-tel {
-      font-family: Arial, 'Helvetica Neue', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #B22222;
-      text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
-    }
-    .org-tel:hover { color: #C9A84C; }
-
-    .org-sep {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent);
-      width: 60%;
-      margin: 0 auto;
-    }
-
   </style>
 </head>
 
@@ -910,12 +800,6 @@
                 <option value="famille_audrey">Famille d'Audrey</option>
               </select>
             </div>
-          </div>
-
-          <div class="field">
-            <label for="reg-table">Nom de votre table <span class="opt">si communiqué</span></label>
-            <input type="text" id="reg-table" placeholder="Ex : Cornette Palace"
-                   autocomplete="off" />
           </div>
 
           <div class="field">
@@ -1034,84 +918,11 @@
       <span class="dv-line"></span><span class="dv-icon">✦</span><span class="dv-line"></span>
     </div>
 
-    <!-- Programme (soirée) -->
-    <div class="content-card" style="text-align:center;">
+    <!-- Programme (à remplir) -->
+    <div class="content-card">
       <h2>Programme de la soirée</h2>
-
-      <div class="prog-list">
-
-        <div class="prog-item">
-          <span class="prog-icon">🚗</span>
-          <div class="prog-body">
-            <span class="prog-time">20h00</span>
-            <span class="prog-title">Entrée des mariés</span>
-          </div>
-        </div>
-
-        <div class="prog-item">
-          <span class="prog-icon">🎙️</span>
-          <div class="prog-body">
-            <span class="prog-time">20h30</span>
-            <span class="prog-title">Présentation des mariés</span>
-          </div>
-        </div>
-
-        <div class="prog-item">
-          <span class="prog-icon">💃</span>
-          <div class="prog-body">
-            <span class="prog-time">20h45</span>
-            <span class="prog-title">Ouverture du bal</span>
-          </div>
-        </div>
-
-        <div class="prog-item">
-          <span class="prog-icon">🎁</span>
-          <div class="prog-body">
-            <span class="prog-time">21h00</span>
-            <span class="prog-title">Remise des cadeaux</span>
-            <span class="prog-note">Préférence en espèces 💵</span>
-          </div>
-        </div>
-
-        <div class="prog-item">
-          <span class="prog-icon">🍽️</span>
-          <div class="prog-body">
-            <span class="prog-time">22h00</span>
-            <span class="prog-title">Buffet</span>
-          </div>
-        </div>
-
-        <div class="prog-item">
-          <span class="prog-icon">🎶</span>
-          <div class="prog-body">
-            <span class="prog-time">23h00</span>
-            <span class="prog-title">Musique &amp; Danses</span>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="divider" aria-hidden="true">
-      <span class="dv-line"></span><span class="dv-icon">✦</span><span class="dv-line"></span>
-    </div>
-
-    <!-- Contacts organisateurs -->
-    <div class="content-card" style="max-width:480px;text-align:center;">
-      <h2>Contacts</h2>
-      <div class="org-contacts">
-        <div class="org-item">
-          <span class="org-role">💍 Wedding Planer</span>
-          <span class="org-name">Madame Esther</span>
-          <a class="org-tel" href="tel:+243816670404">+243 816 670 404</a>
-        </div>
-        <div class="org-sep"></div>
-        <div class="org-item">
-          <span class="org-role">🎤 MC</span>
-          <span class="org-name mc">Emmanuel 3.0</span>
-          <a class="org-tel" href="tel:+243828131806">+243 828 131 806</a>
-        </div>
-      </div>
+      <p>Le programme détaillé sera disponible prochainement.<br>
+      Revenez consulter cette page pour découvrir le déroulé de la soirée.</p>
     </div>
 
     <!-- Lieu -->
@@ -1197,6 +1008,9 @@
       <button class="lightbox-next"  id="lb-next"  aria-label="Suivant">›</button>
     </div>
 
+    <div class="divider" aria-hidden="true">
+      <span class="dv-line"></span><span class="dv-icon">✦</span><span class="dv-line"></span>
+    </div>
 
     <div class="nav-links">
       <a href="/" class="home-link">← Accueil</a>
@@ -1420,7 +1234,6 @@
       var nom      = document.getElementById('reg-nom').value.trim();
       var sexe     = document.getElementById('reg-sexe').value;
       var relation = document.getElementById('reg-relation').value;
-      var tableInput = document.getElementById('reg-table').value.trim();
       var tel      = document.getElementById('reg-tel').value.trim();
       var allergie = document.getElementById('reg-allergie').value.trim();
       var boisson  = document.getElementById('reg-boisson').value;
@@ -1444,7 +1257,7 @@
             'famille_cyntiche': 'PARK SINDIBAD',
             'famille_audrey':  'CINÉMA MEGARAMA RABAT'
           };
-          var devTable = tableInput || DEV_TABLE_MAP[relation] || 'CORNETTE PALACE';
+          var devTable = DEV_TABLE_MAP[relation] || 'CORNETTE PALACE';
           var devSession = { prenom: prenom, nom: nom, table: devTable, boisson: boisson, token: token };
           saveSession(devSession);
           showModal(devSession);
@@ -1458,15 +1271,13 @@
           body: JSON.stringify({
             action: 'registerSoiree',
             prenom, nom, sexe, relation, tel, allergie, boisson,
-            tableNom: tableInput,
             deviceToken: token
           })
         });
         var res = await resp.json();
 
         if (res.success) {
-          var finalTable = res.table || tableInput || null;
-          var s = { prenom: res.prenom || prenom, nom: nom, table: finalTable, boisson: boisson, token: token };
+          var s = { prenom: res.prenom || prenom, nom: nom, table: res.table, boisson: boisson, token: token };
           saveSession(s);
           showModal(s);
         } else {
