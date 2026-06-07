@@ -1519,7 +1519,7 @@
             saveSession({ prenom: found.prenom, nom: found.nom, table: found.table, token });
             showProgram({ prenom: found.prenom, nom: found.nom, table: found.table });
           } else {
-            showErr('recon-error', "Aucune inscription trouvée pour ces nom et prénom. Vérifiez l'orthographe ou utilisez l'onglet "Première inscription".");
+            showErr('recon-error', "Aucune inscription trouvée. Vérifiez l'orthographe ou utilisez l'onglet Première inscription.");
           }
           return;
         }
