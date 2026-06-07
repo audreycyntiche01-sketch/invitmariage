@@ -717,7 +717,6 @@
       flex-direction: column;
       align-items: center;
       gap: 3px;
-      text-align: center;
     }
 
     .prog-time {
@@ -1035,10 +1034,18 @@
     </div>
 
     <!-- Programme (soirée) -->
-    <div class="content-card" style="text-align:center;">
+    <div class="content-card">
       <h2>Programme de la soirée</h2>
 
       <div class="prog-list">
+
+        <div class="prog-item">
+          <span class="prog-icon">🪑</span>
+          <div class="prog-body">
+            <span class="prog-time">19h00</span>
+            <span class="prog-title">Installation des invités</span>
+          </div>
+        </div>
 
         <div class="prog-item">
           <span class="prog-icon">🚗</span>
@@ -1498,10 +1505,22 @@
       try {
         var token = getDeviceToken();
 
-        /* ── DEV ── */
+        /* ── DEV : simule une recherche dans une liste fictive ── */
         if (IS_DEV) {
-          saveSession({ prenom, nom, table: 'Table Jasmin', token });
-          showProgram({ prenom, nom, table: 'Table Jasmin' });
+          var DEV_INSCRITS = [
+            { prenom: 'Audrey',   nom: 'Dupont',  table: 'CORNETTE PALACE' },
+            { prenom: 'Cyntiche', nom: 'Martin',  table: 'COLLINE DE MARRAKECH' }
+          ];
+          var found = DEV_INSCRITS.find(function(r) {
+            return r.prenom.toLowerCase() === prenom.toLowerCase() &&
+                   r.nom.toLowerCase()    === nom.toLowerCase();
+          });
+          if (found) {
+            saveSession({ prenom: found.prenom, nom: found.nom, table: found.table, token });
+            showProgram({ prenom: found.prenom, nom: found.nom, table: found.table });
+          } else {
+            showErr('recon-error', "Aucune inscription trouvée pour ces nom et prénom. Vérifiez l'orthographe ou utilisez l'onglet "Première inscription".");
+          }
           return;
         }
 
@@ -1517,7 +1536,7 @@
           saveSession({ prenom: res.prenom || prenom, nom, table: res.table, token });
           showProgram({ prenom: res.prenom || prenom, nom, table: res.table });
         } else {
-          showErr('recon-error', res.message || 'Aucune inscription trouvée pour ces nom et prénom.');
+          showErr('recon-error', res.message || "Aucune inscription trouvée pour ces nom et prénom.");
         }
 
       } catch(err) {
