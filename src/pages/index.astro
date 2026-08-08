@@ -438,6 +438,135 @@
       .col-content { padding: 72px 96px 72px 100px; gap: 34px; }
       .env-link { width: 230px; }
     }
+
+    /* ══════════════════════════════════════════
+       GALERIE ACCUEIL
+    ══════════════════════════════════════════ */
+    .hidden { display: none !important; }
+
+    .gallery-home {
+      position: relative;
+      z-index: 2;
+      padding: 64px 24px 80px;
+      background: rgba(253, 252, 251, 0.90);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .gallery-home-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: #1A0808;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .gallery-home-sub {
+      font-size: 0.88rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #8A6220;
+      margin-bottom: 28px;
+    }
+
+    .car-home-wrap { position: relative; max-width: 900px; margin: 0 auto; }
+
+    .car-home-track {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+      cursor: grab;
+    }
+    .car-home-track:active { cursor: grabbing; }
+    .car-home-track::-webkit-scrollbar { display: none; }
+
+    .car-home-track img {
+      flex: 0 0 auto;
+      width: 72vw;
+      max-width: 420px;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1.5px solid rgba(201, 168, 76, 0.4);
+      box-shadow: 0 6px 24px rgba(100, 30, 30, 0.15);
+      scroll-snap-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .car-home-track img:hover {
+      transform: scale(1.025);
+      box-shadow: 0 10px 32px rgba(100, 30, 30, 0.25);
+    }
+
+    .car-home-btn {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 252, 250, 0.88);
+      border: 1.5px solid rgba(201, 168, 76, 0.5);
+      color: #8A6220;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      transition: background 0.2s, color 0.2s;
+      z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .car-home-btn:hover { background: #C9A84C; color: #FFF; }
+    .car-home-btn.prev { left: -18px; }
+    .car-home-btn.next { right: -18px; }
+
+    .car-home-dots {
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 14px;
+    }
+    .car-home-dots span {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(201, 168, 76, 0.35);
+      transition: background 0.25s, transform 0.25s;
+      cursor: pointer;
+    }
+    .car-home-dots span.active { background: #C9A84C; transform: scale(1.35); }
+
+    .lb-home {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(10, 2, 2, 0.93);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      animation: lbIn 0.2s ease;
+    }
+    @keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+    .lb-home img {
+      max-width: 90vw; max-height: 88vh;
+      border-radius: 10px;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.5);
+      object-fit: contain;
+    }
+    .lb-home-close {
+      position: absolute; top: 18px; right: 22px;
+      font-size: 2rem; color: rgba(255,255,255,0.8);
+      background: none; border: none; cursor: pointer; line-height: 1;
+      transition: color 0.2s;
+    }
+    .lb-home-close:hover { color: #C9A84C; }
+    .lb-home-prev, .lb-home-next {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      font-size: 2.4rem; color: rgba(255,255,255,0.75);
+      background: none; border: none; cursor: pointer; padding: 10px 16px;
+      transition: color 0.2s;
+    }
+    .lb-home-prev { left: 6px; }
+    .lb-home-next { right: 6px; }
+    .lb-home-prev:hover, .lb-home-next:hover { color: #C9A84C; }
   </style>
 </head>
 
@@ -686,26 +815,26 @@
       <!-- Boutons enveloppe (centrés) -->
       <div class="invitations" aria-label="Nos événements">
 
-        <a href="/civil" class="env-link" aria-label="Mariage Civil et Bénédiction — 10 juillet 2026">
+        <a href="/civil" class="env-link" aria-label="Mariage Civil et Bénédiction — 2 décembre 2026">
           <div class="envelope civil">
             <div class="env-flap"></div>
             <div class="env-bottom"></div>
             <div class="env-seal">AC</div>
             <div class="env-text">
               <span class="env-event">Mariage Civil &amp; Bénédiction</span>
-              <span class="env-date">10 juillet 2026</span>
+              <span class="env-date">2 décembre 2026</span>
             </div>
           </div>
         </a>
 
-        <a href="/soiree" class="env-link" aria-label="Soirée — 17 juillet 2026">
+        <a href="/soiree" class="env-link" aria-label="Soirée — 4 décembre 2026">
           <div class="envelope soiree">
             <div class="env-flap"></div>
             <div class="env-bottom"></div>
             <div class="env-seal">AC</div>
             <div class="env-text">
               <span class="env-event">Soirée</span>
-              <span class="env-date">17 juillet 2026</span>
+              <span class="env-date">4 décembre 2026</span>
             </div>
           </div>
         </a>
@@ -714,9 +843,114 @@
     </div><!-- /col-content -->
   </div><!-- /split -->
 
+  <!-- ══════════════════════════════════════════
+       GALERIE PHOTOS
+  ══════════════════════════════════════════ -->
+  <section class="gallery-home">
+    <p class="gallery-home-title">Nos instants précieux</p>
+    <p class="gallery-home-sub">Quelques souvenirs en attendant le grand jour</p>
+
+    <div class="car-home-wrap">
+      <button class="car-home-btn prev" id="car-home-prev" aria-label="Précédent">‹</button>
+
+      <div class="car-home-track" id="car-home-track">
+        <img src="/images/accueil1.jpeg" alt="Souvenir 1" loading="lazy" data-index="0" />
+        <img src="/images/accueil2.jpeg" alt="Souvenir 2" loading="lazy" data-index="1" />
+        <img src="/images/accueil3.jpeg" alt="Souvenir 3" loading="lazy" data-index="2" />
+        <img src="/images/accueil4.jpeg" alt="Souvenir 4" loading="lazy" data-index="3" />
+        <img src="/images/accueil5.jpeg" alt="Souvenir 5" loading="lazy" data-index="4" />
+        <img src="/images/accueil6.jpeg" alt="Souvenir 6" loading="lazy" data-index="5" />
+        <img src="/images/accueil7.jpeg" alt="Souvenir 7" loading="lazy" data-index="6" />
+        <img src="/images/accueil8.jpeg" alt="Souvenir 8" loading="lazy" data-index="7" />
+      </div>
+
+      <button class="car-home-btn next" id="car-home-next" aria-label="Suivant">›</button>
+    </div>
+
+    <div class="car-home-dots" id="car-home-dots">
+      <span class="active"></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lb-home hidden" id="lb-home" role="dialog" aria-modal="true">
+    <button class="lb-home-close" id="lb-home-close" aria-label="Fermer">✕</button>
+    <button class="lb-home-prev"  id="lb-home-prev-btn" aria-label="Précédent">‹</button>
+    <img src="" alt="" id="lb-home-img" />
+    <button class="lb-home-next"  id="lb-home-next-btn" aria-label="Suivant">›</button>
+  </div>
+
   <script>
+    /* ── Carousel + Lightbox accueil ── */
     (function () {
-      var target = new Date('2026-07-10T00:00:00');
+      var track    = document.getElementById('car-home-track');
+      var dots     = Array.from(document.querySelectorAll('#car-home-dots span'));
+      var imgs     = Array.from(document.querySelectorAll('#car-home-track img'));
+      var lightbox = document.getElementById('lb-home');
+      var lbImg    = document.getElementById('lb-home-img');
+      var lbCurrent = 0;
+
+      function updateDots() {
+        if (!imgs.length) return;
+        var imgW = imgs[0].offsetWidth + 12;
+        var idx  = Math.round(track.scrollLeft / imgW);
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+      }
+      track.addEventListener('scroll', updateDots, { passive: true });
+      dots.forEach(function(d, i) {
+        d.addEventListener('click', function() {
+          track.scrollTo({ left: i * (imgs[0].offsetWidth + 12), behavior: 'smooth' });
+        });
+      });
+      document.getElementById('car-home-prev').addEventListener('click', function() {
+        track.scrollBy({ left: -(imgs[0].offsetWidth + 12), behavior: 'smooth' });
+      });
+      document.getElementById('car-home-next').addEventListener('click', function() {
+        track.scrollBy({ left: imgs[0].offsetWidth + 12, behavior: 'smooth' });
+      });
+
+      /* Drag souris */
+      var isDown = false, startX, scrollStart;
+      track.addEventListener('mousedown', function(e) {
+        isDown = true; startX = e.pageX; scrollStart = track.scrollLeft;
+        track.style.userSelect = 'none';
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (!isDown) return;
+        track.scrollLeft = scrollStart - (e.pageX - startX);
+      });
+      document.addEventListener('mouseup', function() { isDown = false; track.style.userSelect = ''; });
+
+      /* Lightbox */
+      function lbOpen(idx) {
+        lbCurrent = idx;
+        lbImg.src = imgs[idx].src;
+        lightbox.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+      function lbClose() { lightbox.classList.add('hidden'); document.body.style.overflow = ''; }
+      function lbPrev()  { lbOpen((lbCurrent - 1 + imgs.length) % imgs.length); }
+      function lbNext()  { lbOpen((lbCurrent + 1) % imgs.length); }
+
+      imgs.forEach(function(img) {
+        img.addEventListener('click', function() { lbOpen(Number(img.dataset.index)); });
+      });
+      document.getElementById('lb-home-close').addEventListener('click', lbClose);
+      document.getElementById('lb-home-prev-btn').addEventListener('click', lbPrev);
+      document.getElementById('lb-home-next-btn').addEventListener('click', lbNext);
+      lightbox.addEventListener('click', function(e) { if (e.target === lightbox) lbClose(); });
+      document.addEventListener('keydown', function(e) {
+        if (lightbox.classList.contains('hidden')) return;
+        if (e.key === 'Escape')     lbClose();
+        if (e.key === 'ArrowLeft')  lbPrev();
+        if (e.key === 'ArrowRight') lbNext();
+      });
+    })();
+
+    /* ── Compte à rebours ── */
+    (function () {
+      var target = new Date('2026-12-02T00:00:00');
       function pad(n) { return String(n).padStart(2, '0'); }
       function tick() {
         var diff = target - new Date();
@@ -734,6 +968,7 @@
       setInterval(tick, 1000);
     })();
   </script>
+
 
 </body>
 </html>
