@@ -39,12 +39,46 @@
        REGISTER GATE
     ══════════════════════════════════════ */
     #register-gate {
-      position: relative; z-index: 2;
-      min-height: 100vh;
-      display: flex;
+      position: fixed; inset: 0; z-index: 10;
+      background: rgba(18, 4, 4, 0.62);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: none;
       align-items: center;
       justify-content: center;
-      padding: 36px 24px;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .register-close {
+      position: absolute; top: 14px; right: 18px;
+      font-size: 1.5rem; color: rgba(100,30,30,0.4);
+      background: none; border: none; cursor: pointer; line-height: 1;
+      transition: color 0.2s;
+    }
+    .register-close:hover { color: #B22222; }
+
+    .btn-confirm {
+      padding: 13px 40px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, #C0392B 0%, #C9A84C 70%, #B8900A 100%);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-confirm:hover  { opacity: 0.88; }
+    .btn-confirm:active { transform: scale(0.98); }
+    .btn-confirm.confirmed {
+      background: rgba(255, 252, 250, 0.75);
+      border: 1.5px solid rgba(201, 168, 76, 0.6);
+      color: #8A6220;
+      cursor: default;
+      opacity: 1;
     }
 
     .auth-card {
@@ -824,7 +858,8 @@
        FORMULAIRE D'INSCRIPTION
   ════════════════════════════════════ -->
   <div id="register-gate">
-    <div class="auth-card">
+    <div class="auth-card" style="position:relative;">
+      <button class="register-close" id="close-register" aria-label="Fermer">✕</button>
 
       <!-- Enveloppe dorée -->
       <div class="auth-icon">
@@ -847,7 +882,7 @@
       </div>
 
       <h1 class="auth-title">Soirée</h1>
-      <p class="auth-date">17 juillet 2026</p>
+      <p class="auth-date">4 décembre 2026</p>
 
       <!-- Compte à rebours (auth gate) -->
       <div class="countdown-soiree">
@@ -896,25 +931,6 @@
                 <option value="A">Autre</option>
               </select>
             </div>
-          </div>
-
-          <div class="field">
-            <label for="reg-relation">Vous êtes…</label>
-            <div class="select-wrap">
-              <select id="reg-relation">
-                <option value="">Choisir…</option>
-                <option value="ami_cyntiche">Ami(e) / Connaissance de Cyntiche</option>
-                <option value="ami_audrey">Ami(e) / Connaissance d'Audrey</option>
-                <option value="famille_cyntiche">Famille de Cyntiche</option>
-                <option value="famille_audrey">Famille d'Audrey</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="reg-table">Nom de votre table <span class="opt">si communiqué</span></label>
-            <input type="text" id="reg-table" placeholder="Ex : Cornette Palace"
-                   autocomplete="off" />
           </div>
 
           <div class="field">
@@ -1000,11 +1016,11 @@
   <!-- ════════════════════════════════════
        PROGRAMME (après inscription)
   ════════════════════════════════════ -->
-  <div id="program-view" class="hidden">
+  <div id="program-view">
 
     <div class="content-header">
       <p class="content-welcome" id="welcome-msg">Bienvenue !</p>
-      <p class="content-subtitle">Soirée · 17 juillet 2026</p>
+      <p class="content-subtitle">Soirée · 4 décembre 2026</p>
 
       <!-- Compte à rebours (vue programme) -->
       <div class="countdown-soiree">
@@ -1017,12 +1033,8 @@
         <div class="cd-unit"><span class="cd-num cd-s">--</span><span class="cd-label">Sec</span></div>
       </div>
 
-      <div class="table-badge">
-        <span class="table-label">Votre table</span>
-        <span class="table-name" id="table-name">À définir</span>
-        <span class="table-anecdote" id="table-anecdote"></span>
-      </div>
       <p class="boisson-display" id="boisson-display"></p>
+
     </div>
 
     <div class="divider" aria-hidden="true">
@@ -1201,6 +1213,10 @@
     </div>
 
 
+    <div style="text-align:center;">
+      <button class="btn-confirm" id="btn-confirm">Confirmer ma présence</button>
+    </div>
+
     <div class="nav-links">
       <a href="/" class="home-link">← Accueil</a>
       <button class="btn-logout" id="btn-logout">Se déconnecter</button>
@@ -1215,15 +1231,12 @@
     <div class="modal-card">
       <span class="modal-flower">✿</span>
       <p class="modal-welcome-text" id="modal-welcome">Bienvenue !</p>
-      <p class="modal-subtitle">Inscription confirmée · 17 juillet 2026</p>
+      <p class="modal-subtitle">Présence confirmée · 4 décembre 2026</p>
+      <p style="font-size:1rem; color:#7A4848; font-style:italic; margin-bottom:28px; line-height:1.6;">
+        Nous avons hâte de vous voir à la soirée !
+      </p>
 
-      <div class="modal-table-badge">
-        <span class="modal-table-label">Votre table</span>
-        <span class="modal-table-name" id="modal-table-name">À définir</span>
-        <span class="modal-anecdote"   id="modal-anecdote"></span>
-      </div>
-
-      <button class="modal-btn" id="modal-ok">Accéder au programme →</button>
+      <button class="modal-btn" id="modal-ok">Parfait !</button>
     </div>
   </div>
 
@@ -1296,10 +1309,8 @@
     }
 
     /* ─── Éléments DOM ─── */
-    var gate        = document.getElementById('register-gate');
-    var view        = document.getElementById('program-view');
-    var welcomeMsg  = document.getElementById('welcome-msg');
-    var tableNameEl = document.getElementById('table-name');
+    var gate       = document.getElementById('register-gate');
+    var welcomeMsg = document.getElementById('welcome-msg');
 
     /* ─── Première lettre majuscule, reste minuscule ─── */
     function toTitleCase(str) {
@@ -1315,54 +1326,38 @@
       return TABLES[tableName.toUpperCase()] || TABLES[tableName] || '';
     }
 
-    /* ─── Afficher le programme (depuis session ou modal Ok) ─── */
+    /* ─── Afficher/mettre à jour le programme ─── */
     function showProgram(s) {
       gate.style.display = 'none';
       document.getElementById('table-modal').classList.add('hidden');
-      view.classList.remove('hidden');
-      welcomeMsg.textContent = 'Bienvenue, ' + (s.prenom || s.nom || 'cher(e) invité(e)') + ' !';
-
-      var rawTable  = s.table || null;
-      var tableName = rawTable ? toTitleCase(rawTable) : 'À définir';
-      tableNameEl.textContent = tableName;
-
-      var anecdoteEl = document.getElementById('table-anecdote');
-      if (anecdoteEl) {
-        var anecdote = rawTable ? getAnecdote(rawTable) : '';
-        anecdoteEl.textContent = anecdote ? '✦ ' + anecdote : '';
+      if (s && (s.prenom || s.nom)) {
+        welcomeMsg.textContent = 'Bienvenue, ' + (s.prenom || s.nom) + ' !';
       }
-
-      /* Boisson */
       var boissonEl = document.getElementById('boisson-display');
-      if (boissonEl && s.boisson) {
+      if (boissonEl && s && s.boisson) {
         boissonEl.textContent = '🥂 ' + s.boisson;
+      }
+      var confirmBtn = document.getElementById('btn-confirm');
+      if (confirmBtn) {
+        confirmBtn.textContent = '✓ Présence confirmée';
+        confirmBtn.classList.add('confirmed');
+        confirmBtn.disabled = true;
       }
     }
 
-    /* ─── Afficher le modal de confirmation (premier enregistrement) ─── */
+    /* ─── Modal de confirmation (après inscription) ─── */
     function showModal(s) {
       var modal = document.getElementById('table-modal');
       document.getElementById('modal-welcome').textContent =
         'Bienvenue, ' + (s.prenom || 'cher(e) invité(e)') + ' !';
-
-      var rawTable  = s.table || null;
-      var tableName = rawTable ? toTitleCase(rawTable) : 'À définir';
-      document.getElementById('modal-table-name').textContent = tableName;
-
-      var anecdote = rawTable ? getAnecdote(rawTable) : '';
-      document.getElementById('modal-anecdote').textContent =
-        anecdote ? '✦ ' + anecdote : (!rawTable ? 'Votre table vous sera communiquée prochainement.' : '');
-
       modal.classList.remove('hidden');
-
-      /* Bouton Ok → programme */
       document.getElementById('modal-ok').onclick = function () {
         showProgram(s);
       };
     }
 
     /* ─── Vérification au chargement ─── */
-    var session = getSession();
+    var session = getSession(); /* var → scope IIFE, accessible dans logout */
     if (session) {
       /* Affiche immédiatement les données en cache */
       showProgram(session);
@@ -1377,18 +1372,28 @@
         .then(function(r) { return r.json(); })
         .then(function(res) {
           if (res.success && res.table && res.table !== session.table) {
-            /* La table a changé dans Sheets → on met à jour silencieusement */
             session.table = res.table;
             saveSession(session);
-            var rawTable = res.table;
-            document.getElementById('table-name').textContent = toTitleCase(rawTable);
-            var anecdoteEl = document.getElementById('table-anecdote');
-            if (anecdoteEl) anecdoteEl.textContent = getAnecdote(rawTable) ? '✦ ' + getAnecdote(rawTable) : '';
           }
         })
         .catch(function() { /* silencieux — pas bloquant */ });
       }
     }
+
+    /* ─── Bouton Confirmer présence ─── */
+    document.getElementById('btn-confirm').addEventListener('click', function () {
+      if (!this.classList.contains('confirmed')) {
+        gate.style.display = 'flex';
+      }
+    });
+
+    /* ─── Fermer le formulaire (✕ ou clic sur fond) ─── */
+    document.getElementById('close-register').addEventListener('click', function () {
+      gate.style.display = 'none';
+    });
+    gate.addEventListener('click', function (e) {
+      if (e.target === gate) gate.style.display = 'none';
+    });
 
     /* ─── Onglets ─── */
     var tabReg    = document.getElementById('tab-register');
@@ -1422,15 +1427,12 @@
       var prenom   = document.getElementById('reg-prenom').value.trim();
       var nom      = document.getElementById('reg-nom').value.trim();
       var sexe     = document.getElementById('reg-sexe').value;
-      var relation = document.getElementById('reg-relation').value;
-      var tableInput = document.getElementById('reg-table').value.trim();
       var tel      = document.getElementById('reg-tel').value.trim();
       var allergie = document.getElementById('reg-allergie').value.trim();
       var boisson  = document.getElementById('reg-boisson').value;
 
       if (!prenom || !nom) { showErr('reg-error', 'Veuillez renseigner votre nom et prénom.'); return; }
       if (!sexe)           { showErr('reg-error', 'Veuillez choisir une civilité.'); return; }
-      if (!relation)       { showErr('reg-error', 'Veuillez indiquer votre relation avec les mariés.'); return; }
       if (!boisson)        { showErr('reg-error', 'Veuillez choisir votre boisson.'); return; }
 
       var btn = document.getElementById('btn-register');
@@ -1439,16 +1441,9 @@
       try {
         var token = getDeviceToken();
 
-        /* ── DEV : simulation locale avec affectation de table par relation ── */
+        /* ── DEV ── */
         if (IS_DEV) {
-          var DEV_TABLE_MAP = {
-            'ami_cyntiche':    'CORNETTE PALACE',
-            'ami_audrey':      'COLLINE DE MARRAKECH',
-            'famille_cyntiche': 'PARK SINDIBAD',
-            'famille_audrey':  'CINÉMA MEGARAMA RABAT'
-          };
-          var devTable = tableInput || DEV_TABLE_MAP[relation] || 'CORNETTE PALACE';
-          var devSession = { prenom: prenom, nom: nom, table: devTable, boisson: boisson, token: token };
+          var devSession = { prenom: prenom, nom: nom, boisson: boisson, token: token };
           saveSession(devSession);
           showModal(devSession);
           return;
@@ -1460,8 +1455,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'registerSoiree',
-            prenom, nom, sexe, relation, tel, allergie, boisson,
-            tableNom: tableInput,
+            prenom, nom, sexe, tel, allergie, boisson,
             deviceToken: token
           })
         });
@@ -1625,16 +1619,22 @@
     /* ─── Déconnexion ─── */
     document.getElementById('btn-logout').addEventListener('click', function () {
       clearSession();
-      view.classList.add('hidden');
-      gate.style.display = 'flex';
+      session = null;
+      welcomeMsg.textContent = 'Bienvenue !';
+      var confirmBtn = document.getElementById('btn-confirm');
+      if (confirmBtn) {
+        confirmBtn.textContent = 'Confirmer ma présence';
+        confirmBtn.classList.remove('confirmed');
+        confirmBtn.disabled = false;
+      }
     });
 
     /* ─────────────────────────────────
-       COMPTE À REBOURS — Soirée 17 juillet 2026
+       COMPTE À REBOURS — Soirée 4 décembre 2026
        (mise à jour de tous les countdowns simultanément)
     ───────────────────────────────── */
     (function () {
-      var cible = new Date('2026-07-17T18:00:00').getTime();
+      var cible = new Date('2026-12-04T18:00:00').getTime();
 
       function pad(n) { return n < 10 ? '0' + n : String(n); }
 
