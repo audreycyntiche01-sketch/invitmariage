@@ -928,6 +928,7 @@
                 <option value="">Choisir…</option>
                 <option value="M">Monsieur</option>
                 <option value="F">Madame / Mademoiselle</option>
+                <option value="C">Couple</option>
                 <option value="A">Autre</option>
               </select>
             </div>
@@ -1474,7 +1475,29 @@
         }
 
       } catch(err) {
-        showErr('reg-error', 'Erreur réseau. Réessayez dans quelques instants.');
+        /* La connexion a échoué mais l'inscription a peut-être été enregistrée.
+           On tente une reconnexion automatique pour vérifier. */
+        showErr('reg-error', 'Connexion lente, vérification en cours…');
+        try {
+          await new Promise(function(r){ setTimeout(r, 2500); });
+          var token2 = getDeviceToken();
+          var resp2 = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'reconnectSoiree', prenom, nom, deviceToken: token2 })
+          });
+          var res2 = await resp2.json();
+          if (res2.success) {
+            var s2 = { prenom: res2.prenom || prenom, nom: nom, table: res2.table || null, boisson: boisson, token: token2 };
+            saveSession(s2);
+            showErr('reg-error', '');
+            showModal(s2);
+          } else {
+            showErr('reg-error', 'Erreur réseau. Si votre nom apparaît dans « Déjà inscrit(e) », votre présence est confirmée.');
+          }
+        } catch(err2) {
+          showErr('reg-error', 'Erreur réseau. Si votre nom apparaît dans « Déjà inscrit(e) », votre présence est confirmée.');
+        }
       } finally {
         setBtn(btn, false, 'Confirmer ma présence');
       }
