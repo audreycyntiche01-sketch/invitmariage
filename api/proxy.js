@@ -21,12 +21,28 @@ export default async function handler(req, res) {
     /* req.body est déjà parsé en objet par Vercel (Content-Type: application/json) */
     const payload = JSON.stringify(req.body);
 
-    const response = await fetch(APPS_SCRIPT_URL, {
-      method:   'POST',
-      headers:  { 'Content-Type': 'text/plain' },
-      body:     payload,
-      redirect: 'follow',
-    });
+    const controller = new AbortController();
+    const timeoutId  = setTimeout(() => controller.abort(), 8000);
+
+    let response;
+    try {
+      response = await fetch(APPS_SCRIPT_URL, {
+        method:   'POST',
+        headers:  { 'Content-Type': 'text/plain' },
+        body:     payload,
+        redirect: 'follow',
+        signal:   controller.signal,
+      });
+    } catch (fetchErr) {
+      clearTimeout(timeoutId);
+      if (fetchErr.name === 'AbortError') {
+        /* Apps Script n'a pas répondu dans les 8 s — la requête a quand même
+           probablement été traitée. Le client va tenter une reconnexion. */
+        return res.status(202).json({ success: false, timeout: true });
+      }
+      throw fetchErr;
+    }
+    clearTimeout(timeoutId);
 
     const text = await response.text();
 
